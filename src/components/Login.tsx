@@ -2,28 +2,32 @@ import { FunctionComponent } from "react";
 import { FormikValues, useFormik } from "formik";
 import * as yup from "yup";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { loginUser } from "../services/usersService";
+import { User } from "../interfaces/User";
 
 interface LoginProps {}
 
 const Login: FunctionComponent<LoginProps> = () => {
   const navigate: NavigateFunction = useNavigate();
+
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema: yup.object({
       email: yup.string().required().email(),
       password: yup.string().required().min(8),
     }),
-    onSubmit: (values) => {
-      //   checkUser(values)
-      //     .then((res) => {
-      //       if (res.data.length) {
-      //         navigate("/home");
-      //         localStorage.setItem("userId", JSON.stringify(res.data[0].id));
-      //       } else {
-      //         alert("No such user");
-      //       }
-      //     })
-      //     .catch((err) => console.log(err));
+    onSubmit: ({ email, password }: FormikValues) => {
+      loginUser(email, password)
+        .then((res) => {
+          console.log(res);
+          if (res.data.length) {
+            navigate("/");
+            localStorage.setItem("token", res.data);
+          } else {
+            alert("No such user");
+          }
+        })
+        .catch((err) => console.log(err));
     },
   });
   return (
@@ -42,9 +46,11 @@ const Login: FunctionComponent<LoginProps> = () => {
             onBlur={formik.handleBlur}
           />
           <label htmlFor="floatingInput">Email address</label>
-          {formik.touched.email && formik.errors.email && (
-            <p className="text-danger">{formik.errors.email}</p>
-          )}
+          {formik.touched.email &&
+            formik.errors.email &&
+            typeof formik.errors.email === "string" && (
+              <p className="text-danger">{formik.errors.email}</p>
+            )}
         </div>
         <div className="form-floating">
           <input
@@ -58,9 +64,11 @@ const Login: FunctionComponent<LoginProps> = () => {
             onBlur={formik.handleBlur}
           />
           <label htmlFor="floatingPassword">Password</label>
-          {formik.touched.password && formik.errors.password && (
-            <p className="text-danger">{formik.errors.password}</p>
-          )}
+          {formik.touched.password &&
+            formik.errors.password &&
+            typeof formik.errors.password === "string" && (
+              <p className="text-danger">{formik.errors.password}</p>
+            )}
         </div>
         <button
           className="btn btn-primary mt-3 w-100"
