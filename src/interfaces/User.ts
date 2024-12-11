@@ -1,3 +1,5 @@
+import { JwtPayload } from "jwt-decode";
+
 export interface User {
   name: {
     first: string;
@@ -20,4 +22,11 @@ export interface User {
     zip: number;
   };
   isBusiness: boolean;
+}
+
+export interface ExtendedjwrPayload extends JwtPayload {
+  _id: string;
+  isBusniess: boolean;
+  isAdmin: boolean;
+  iat: number;
 }

@@ -1,11 +1,9 @@
 import axios from "axios";
 import { User } from "../interfaces/User";
-import { jwtDecode, JwtPayload } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import { ExtendedjwrPayload } from "../interfaces/User";
 
 const api: string = `${process.env.REACT_APP_API}/users`;
-
-// Example usage of api
-console.log(api);
 
 // User login
 export function loginUser(email: string, password: string) {
@@ -16,12 +14,7 @@ export function loginUser(email: string, password: string) {
 export function registerUser(user: User) {
   return axios.post(api, user);
 }
-interface ExtendedjwrPayload extends JwtPayload {
-  _id: string;
-  isBusniess: boolean;
-  isAdmin: boolean;
-  iat: number;
-}
+
 // Get current user
 export function getCurrentUserById() {
   const token = localStorage.getItem("token");

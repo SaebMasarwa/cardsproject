@@ -16,7 +16,7 @@ const themes = {
 export let userManagement = {
   token: localStorage.getItem("token") ?? "",
   loggedIn: localStorage.getItem("token") ? true : false,
-  user: {},
+  renderControl: false,
   themes: themes,
 };
 
@@ -29,10 +29,11 @@ export const useUser = () => {
       getCurrentUserById()
         .then((res) => {
           setUser(res?.data);
+          userManagement.renderControl = true;
         })
         .catch((err) => console.log(err));
     }
   }, []);
 
-  return user;
+  return { user, setUser };
 };

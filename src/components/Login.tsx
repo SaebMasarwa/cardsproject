@@ -3,11 +3,13 @@ import { FormikValues, useFormik } from "formik";
 import * as yup from "yup";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/usersService";
-import { User } from "../interfaces/User";
+import { userManagement } from "../hooks/useUser";
 
-interface LoginProps {}
+interface LoginProps {
+  setRenderControl: (control: boolean) => void;
+}
 
-const Login: FunctionComponent<LoginProps> = () => {
+const Login: FunctionComponent<LoginProps> = ({ setRenderControl }) => {
   const navigate: NavigateFunction = useNavigate();
 
   const formik = useFormik({
@@ -23,6 +25,8 @@ const Login: FunctionComponent<LoginProps> = () => {
           if (res.data.length) {
             navigate("/");
             localStorage.setItem("token", res.data);
+            setRenderControl(true);
+            userManagement.renderControl = true;
           } else {
             alert("No such user");
           }

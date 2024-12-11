@@ -1,13 +1,21 @@
 import { FunctionComponent, useEffect } from "react";
 import { NavigateFunction, NavLink, useNavigate } from "react-router-dom";
 import { userManagement } from "../hooks/useUser";
-import { getCurrentUserById } from "../services/usersService";
+import { User } from "../interfaces/User";
 
 interface NavbarProps {
   toggleDarkMode: (mode: boolean) => void;
+  user?: User;
+  renderControl: boolean;
+  setRenderControl: (control: boolean) => void;
 }
 
-const Navbar: FunctionComponent<NavbarProps> = ({ toggleDarkMode }) => {
+const Navbar: FunctionComponent<NavbarProps> = ({
+  toggleDarkMode,
+  user,
+  renderControl,
+  setRenderControl,
+}) => {
   const navigate: NavigateFunction = useNavigate();
 
   useEffect(() => {
@@ -15,15 +23,16 @@ const Navbar: FunctionComponent<NavbarProps> = ({ toggleDarkMode }) => {
       navigate("/login");
     } else {
       navigate("/");
-      const token = localStorage.getItem("token");
-      if (token) {
-        userManagement.user = getCurrentUserById();
-      }
     }
-  }, []);
+  }, [toggleDarkMode, user, userManagement.renderControl]);
 
   return (
     <>
+      <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossOrigin="anonymous"
+      ></script>
       <nav
         className="navbar navbar-expand-lg bg-dark text-light"
         data-bs-theme="dark"
@@ -50,10 +59,21 @@ const Navbar: FunctionComponent<NavbarProps> = ({ toggleDarkMode }) => {
                   About
                 </NavLink>
               </li>
+              {user?.isBusiness && (
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    aria-current="page"
+                    to="/favcards"
+                  >
+                    Fav Cards
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
           <div>
-            <ul className="d-flex navbar-nav  mb-2 mb-lg-0">
+            <ul className="d-flex navbar-nav  mb-2 mb-lg-0 align-items-center">
               <form className="d-flex" role="search">
                 <input
                   className="form-control me-2"
@@ -81,16 +101,27 @@ const Navbar: FunctionComponent<NavbarProps> = ({ toggleDarkMode }) => {
                 )}
               </li>
               {userManagement.loggedIn ? (
-                <button
-                  className="btn btn-outline-info"
-                  type="submit"
-                  onClick={() => {
-                    navigate("/");
-                    localStorage.removeItem("token");
-                  }}
-                >
-                  Logout
-                </button>
+                <>
+                  <li className="nav-link">
+                    <NavLink className="nav-link" to="/profile">
+                      <i className="bi bi-person-circle"></i>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <button
+                      className="btn btn-outline-info"
+                      type="submit"
+                      onClick={() => {
+                        navigate("/");
+                        localStorage.removeItem("token");
+                        userManagement.renderControl = false;
+                        setRenderControl(false);
+                      }}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </>
               ) : (
                 <>
                   <li>

@@ -6,21 +6,37 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import About from "./components/About";
-import { UserContext, userManagement } from "./hooks/useUser";
+import { UserContext, userManagement, useUser } from "./hooks/useUser";
 import Navbar from "./components/Navbar";
+import { getCurrentUserById } from "./services/usersService";
+import { User } from "./interfaces/User";
+import Footer from "./components/Footer";
+import FavCards from "./components/FavCards";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
     localStorage.getItem("LightMode") === "true" ? true : false
   );
-  const [user, setUser] = useState();
+  const [renderControl, setRenderControl] = useState<boolean>(false);
+  const { user, setUser } = useUser();
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     localStorage.setItem("darkMode", darkMode as unknown as string);
   };
 
-  useEffect(() => {}, [darkMode]);
+  useEffect(() => {
+    getCurrentUserById().then((res) => {
+      if (res) {
+        setUser(res.data);
+      }
+    });
+  }, [
+    darkMode,
+
+    // renderControl,
+    userManagement.renderControl,
+  ]);
 
   return (
     <div
@@ -39,14 +55,24 @@ function App() {
     >
       <UserContext.Provider value={userManagement}>
         <Router>
-          <Navbar toggleDarkMode={toggleDarkMode} />
+          <Navbar
+            toggleDarkMode={toggleDarkMode}
+            user={user}
+            renderControl={renderControl}
+            setRenderControl={setRenderControl}
+          />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/favcards" element={<FavCards />} />
+            <Route
+              path="/login"
+              element={<Login setRenderControl={setRenderControl} />}
+            />
             <Route path="/about" element={<About />} />
             <Route path="/register" element={<Register />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
+          <Footer />
         </Router>
       </UserContext.Provider>
     </div>
