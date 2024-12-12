@@ -22,10 +22,7 @@ export default function Home() {
             <Card card={cards[3]} />
           </div>
         ) : (
-          <div
-            className="spinner-border text-primary text-center"
-            role="status"
-          >
+          <div className="spinner-border text-primary mx-auto" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         )}

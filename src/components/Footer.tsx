@@ -16,6 +16,18 @@ export default function Footer() {
           </NavLink>
         </figcaption>
       </figure>
+      <figure className="figure ms-3">
+        <i className="bi bi-heart-fill"></i>
+        <figcaption className="figure-caption">
+          <NavLink
+            className="text-decoration-none"
+            aria-current="page"
+            to="/favcards"
+          >
+            Favorites
+          </NavLink>
+        </figcaption>
+      </figure>
     </div>
   );
 }

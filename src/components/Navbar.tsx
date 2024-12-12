@@ -33,10 +33,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossOrigin="anonymous"
       ></script>
-      <nav
-        className="navbar navbar-expand-lg bg-dark text-light"
-        data-bs-theme="dark"
-      >
+      <nav className="navbar navbar-expand-lg ">
         <div className="container-fluid">
           <NavLink className="navbar-brand text-info" to="/">
             BCard
@@ -85,16 +82,16 @@ const Navbar: FunctionComponent<NavbarProps> = ({
                   Search
                 </button>
               </form>
-              <li className="nav-link">
+              <li className="nav-item">
                 {localStorage.getItem("darkMode") === "true" ? (
                   <i
-                    className="bi bi-moon-fill"
+                    className="bi bi-moon-fill nav-link"
                     onClick={() => toggleDarkMode(false)}
                     title="Dark Mode"
                   ></i>
                 ) : (
                   <i
-                    className="bi bi-moon"
+                    className="bi bi-moon nav-link"
                     onClick={() => toggleDarkMode(true)}
                     title="Light Mode"
                   ></i>
@@ -102,12 +99,12 @@ const Navbar: FunctionComponent<NavbarProps> = ({
               </li>
               {userManagement.loggedIn ? (
                 <>
-                  <li className="nav-link">
+                  <li className="nav-item">
                     <NavLink className="nav-link" to="/profile">
                       <i className="bi bi-person-circle"></i>
                     </NavLink>
                   </li>
-                  <li>
+                  <li className="nav-item">
                     <button
                       className="btn btn-outline-info"
                       type="submit"

@@ -1,31 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { getMyCards } from "../services/cardsService";
 import { CardType } from "../interfaces/Card";
+import Card from "./Card";
 
-export default function FavCards() {
+function FavCards() {
   const [myFavCards, setMyFavCards] = useState<CardType[] | null>(null);
 
   useEffect(() => {
-    async function fetchCards() {
-      const cards = await getMyCards();
-      setMyFavCards(cards);
-    }
-    fetchCards();
+    getMyCards().then((res) => setMyFavCards(res));
   }, []);
 
   return (
     <>
-      <div>Favorite Cards</div>
+      <div className="display-3">Favorite Cards</div>
       <div>
-        {myFavCards?.map((card) => {
-          return (
-            <div key={card._id}>
-              <div>{card.title}</div>
-              <div>{card.description}</div>
-            </div>
-          );
-        })}
+        {myFavCards?.length ? (
+          myFavCards.map((card) => {
+            return (
+              <div className="mx-auto mt-4 d-flex">
+                (<Card card={card} />)
+              </div>
+            );
+          })
+        ) : (
+          <div className="display-3 text-danger">No cards found</div>
+        )}
       </div>
     </>
   );
 }
+
+export default FavCards;

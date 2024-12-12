@@ -1,7 +1,13 @@
 import React from "react";
 import type { CardType } from "../interfaces/Card";
+import { likeCard } from "../services/cardsService";
 
 export default function Card({ card }: { card: CardType }) {
+  // const [like, setLike] = React.useState<boolean>(false);
+
+  const handleLike = (cardId: string) => {
+    likeCard(cardId);
+  };
   return (
     <>
       <div className="card m-3" style={{ width: "20rem" }} key={card._id}>
@@ -13,9 +19,16 @@ export default function Card({ card }: { card: CardType }) {
         <div className="card-body">
           <h5 className="card-title">{card.title}</h5>
           <p className="card-text">{card.description}</p>
-          {/* <a href="#" className="btn btn-primary">
-            Go somewhere
-          </a> */}
+          <a href={`tel:${card.phone}`} className="btn btn-primary">
+            <i className="bi bi-telephone-fill"></i>
+          </a>
+          <a
+            href="#"
+            className="btn btn-primary"
+            onClick={() => handleLike(card._id)}
+          >
+            <i className="bi bi-heart-fill"></i>
+          </a>
         </div>
       </div>
     </>

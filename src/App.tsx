@@ -9,7 +9,6 @@ import About from "./components/About";
 import { UserContext, userManagement, useUser } from "./hooks/useUser";
 import Navbar from "./components/Navbar";
 import { getCurrentUserById } from "./services/usersService";
-import { User } from "./interfaces/User";
 import Footer from "./components/Footer";
 import FavCards from "./components/FavCards";
 
@@ -23,6 +22,8 @@ function App() {
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     localStorage.setItem("darkMode", darkMode as unknown as string);
+    const htmlElement = document.querySelector("html");
+    htmlElement?.setAttribute("data-bs-theme", darkMode ? "dark" : "light");
   };
 
   useEffect(() => {
@@ -31,12 +32,7 @@ function App() {
         setUser(res.data);
       }
     });
-  }, [
-    darkMode,
-
-    // renderControl,
-    userManagement.renderControl,
-  ]);
+  }, [darkMode, renderControl]);
 
   return (
     <div
