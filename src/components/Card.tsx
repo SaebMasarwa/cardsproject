@@ -19,12 +19,12 @@ export default function Card({ card }: { card: CardType }) {
         <div className="card-body">
           <h5 className="card-title">{card.title}</h5>
           <p className="card-text">{card.description}</p>
-          <a href={`tel:${card.phone}`} className="btn btn-primary">
+          <a href={`tel:${card.phone}`} className="btn btn-outline-primary">
             <i className="bi bi-telephone-fill"></i>
           </a>
           <a
             href="#"
-            className="btn btn-primary"
+            className="btn btn-outline-primary ms-3"
             onClick={() => handleLike(card._id)}
           >
             <i className="bi bi-heart-fill"></i>
