@@ -14,19 +14,26 @@ import FavCards from "./components/FavCards";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
-    localStorage.getItem("LightMode") === "true" ? true : false
+    localStorage.getItem("darkMode") === "true" ? true : false
   );
   const [renderControl, setRenderControl] = useState<boolean>(false);
   const { user, setUser } = useUser();
+  const htmlElement = document.querySelector("html");
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     localStorage.setItem("darkMode", darkMode as unknown as string);
-    const htmlElement = document.querySelector("html");
-    htmlElement?.setAttribute("data-bs-theme", darkMode ? "dark" : "light");
+    localStorage.getItem("darkMode") === "true"
+      ? htmlElement?.setAttribute("data-bs-theme", "dark")
+      : htmlElement?.setAttribute("data-bs-theme", "light");
   };
 
   useEffect(() => {
+    if (localStorage.getItem("darkMode") === "true") {
+      htmlElement?.setAttribute("data-bs-theme", "dark");
+    } else {
+      htmlElement?.setAttribute("data-bs-theme", "light");
+    }
     getCurrentUserById().then((res) => {
       if (res) {
         setUser(res.data);
@@ -35,20 +42,7 @@ function App() {
   }, [darkMode, renderControl]);
 
   return (
-    <div
-      className="App"
-      style={
-        localStorage.getItem("darkMode") === "true"
-          ? {
-              color: userManagement.themes.dark.color,
-              background: userManagement.themes.dark.background,
-            }
-          : {
-              color: userManagement.themes.light.color,
-              background: userManagement.themes.light.background,
-            }
-      }
-    >
+    <div className="App">
       <UserContext.Provider value={userManagement}>
         <Router>
           <Navbar
