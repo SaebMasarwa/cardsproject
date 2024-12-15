@@ -1,6 +1,5 @@
 import { FunctionComponent, useContext, useEffect } from "react";
 import { NavigateFunction, NavLink, useNavigate } from "react-router-dom";
-// import { userManagement } from "../hooks/useUserBACKUP";
 // import { User } from "../interfaces/User";
 import { ThemeContext } from "../context/themeContext";
 import { UserContext } from "../context/userContext";
@@ -52,17 +51,17 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   About
                 </NavLink>
               </li>
-              {/* {loggedIn && ( */}
-              <li className="nav-item">
-                <NavLink
-                  className="nav-link"
-                  aria-current="page"
-                  to="/favcards"
-                >
-                  Fav Cards
-                </NavLink>
-              </li>
-              {/* )} */}
+              {loggedIn && (
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    aria-current="page"
+                    to="/favcards"
+                  >
+                    Fav Cards
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
           <div>

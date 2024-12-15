@@ -12,13 +12,14 @@ import FavCards from "./components/FavCards";
 import { ThemeContext } from "./context/themeContext";
 import { UserContext } from "./context/userContext";
 import { getCurrentUserById } from "./services/usersService";
+import { User } from "./interfaces/User";
 
 function App() {
-  const { user, setUser, loggedIn, setLoggedIn } =
-    React.useContext(UserContext);
   const [darkMode, setDarkMode] = useState<boolean>(
     localStorage.getItem("darkMode") === "true" ? true : false
   );
+  const [user, setUser] = useState<User | null>(null);
+  const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const htmlElement = document.querySelector("html");
 
   const toggleDarkMode = () => {
@@ -30,20 +31,25 @@ function App() {
   };
 
   useEffect(() => {
-    getCurrentUserById().then((res) => {
-      if (res) {
-        setUser(res.data);
-        setLoggedIn(true);
-        console.log("LoggedIn in App " + loggedIn);
-      }
-    });
+    getCurrentUserById()
+      .then((res) => {
+        if (res) {
+          console.log("User in App " + JSON.stringify(res.data));
+
+          setUser(res.data);
+          setLoggedIn(true);
+        }
+      })
+      .catch((err) => console.log(err));
 
     if (localStorage.getItem("darkMode") === "true") {
       htmlElement?.setAttribute("data-bs-theme", "dark");
     } else {
       htmlElement?.setAttribute("data-bs-theme", "light");
     }
-  }, [darkMode, user, loggedIn]);
+    console.log("User in App Line: 47" + user);
+    console.log("LoggedIn in App " + loggedIn);
+  }, [darkMode]);
 
   console.log("LoggedIn in App " + loggedIn);
   return (

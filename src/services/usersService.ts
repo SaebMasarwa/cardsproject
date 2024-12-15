@@ -21,13 +21,13 @@ export async function getCurrentUserById() {
   if (!token) return Promise.resolve(null);
   const decoded = jwtDecode<ExtendedjwrPayload>(token as string);
   const userId = decoded._id;
-  console.log("User ID (getCurrentUserById): " + decoded._id);
+  // console.log("User ID (getCurrentUserById): " + decoded._id);
   const user = await axios.get(`${api}/${userId}`, {
     headers: {
       "x-auth-token": token,
     },
   });
-  console.log("User (getCurrentUserById): " + JSON.stringify(user));
+  // console.log("User (getCurrentUserById): " + JSON.stringify(user));
 
   return user;
 }
