@@ -6,18 +6,19 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import About from "./components/About";
-import { UserContext, userManagement, useUser } from "./hooks/useUser";
 import Navbar from "./components/Navbar";
-import { getCurrentUserById } from "./services/usersService";
 import Footer from "./components/Footer";
 import FavCards from "./components/FavCards";
+import { ThemeContext } from "./context/themeContext";
+import { UserContext } from "./context/userContext";
+import { getCurrentUserById } from "./services/usersService";
 
 function App() {
+  const { user, setUser, loggedIn, setLoggedIn } =
+    React.useContext(UserContext);
   const [darkMode, setDarkMode] = useState<boolean>(
     localStorage.getItem("darkMode") === "true" ? true : false
   );
-  const [renderControl, setRenderControl] = useState<boolean>(false);
-  const { user, setUser } = useUser();
   const htmlElement = document.querySelector("html");
 
   const toggleDarkMode = () => {
@@ -29,41 +30,51 @@ function App() {
   };
 
   useEffect(() => {
+    getCurrentUserById().then((res) => {
+      if (res) {
+        setUser(res.data);
+        setLoggedIn(true);
+        console.log("LoggedIn in App " + loggedIn);
+      }
+    });
+
     if (localStorage.getItem("darkMode") === "true") {
       htmlElement?.setAttribute("data-bs-theme", "dark");
     } else {
       htmlElement?.setAttribute("data-bs-theme", "light");
     }
-    getCurrentUserById().then((res) => {
-      if (res) {
-        setUser(res.data);
-      }
-    });
-  }, [darkMode, renderControl]);
+  }, [darkMode, user, loggedIn]);
 
+  console.log("LoggedIn in App " + loggedIn);
   return (
     <div className="App">
-      <UserContext.Provider value={userManagement}>
-        <Router>
-          <Navbar
-            toggleDarkMode={toggleDarkMode}
-            user={user}
-            renderControl={renderControl}
-            setRenderControl={setRenderControl}
-          />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/favcards" element={<FavCards />} />
-            <Route
-              path="/login"
-              element={<Login setRenderControl={setRenderControl} />}
-            />
-            <Route path="/about" element={<About />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-          <Footer />
-        </Router>
+      <UserContext.Provider
+        value={{
+          user,
+          setUser,
+          loggedIn,
+          setLoggedIn,
+        }}
+      >
+        <ThemeContext.Provider
+          value={{
+            darkMode,
+            toggleDarkMode,
+          }}
+        >
+          <Router>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/favcards" element={<FavCards />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+            <Footer />
+          </Router>
+        </ThemeContext.Provider>
       </UserContext.Provider>
     </div>
   );

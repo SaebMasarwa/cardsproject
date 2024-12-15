@@ -1,30 +1,26 @@
-import { FunctionComponent, useEffect } from "react";
+import { FunctionComponent, useContext, useEffect } from "react";
 import { NavigateFunction, NavLink, useNavigate } from "react-router-dom";
-import { userManagement } from "../hooks/useUser";
-import { User } from "../interfaces/User";
+// import { userManagement } from "../hooks/useUserBACKUP";
+// import { User } from "../interfaces/User";
+import { ThemeContext } from "../context/themeContext";
+import { UserContext } from "../context/userContext";
 
-interface NavbarProps {
-  toggleDarkMode: (mode: boolean) => void;
-  user?: User;
-  renderControl: boolean;
-  setRenderControl: (control: boolean) => void;
-}
+interface NavbarProps {}
 
-const Navbar: FunctionComponent<NavbarProps> = ({
-  toggleDarkMode,
-  user,
-  renderControl,
-  setRenderControl,
-}) => {
+const Navbar: FunctionComponent<NavbarProps> = () => {
   const navigate: NavigateFunction = useNavigate();
-
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
+  const { user, setUser, loggedIn, setLoggedIn } = useContext(UserContext);
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
       navigate("/");
     }
-  }, [toggleDarkMode, user, userManagement.renderControl]);
+  }, [user, darkMode, loggedIn]);
+
+  console.log("User in Navbar: " + user);
+  console.log("LoggedIn in Navbar: " + loggedIn);
 
   return (
     <>
@@ -56,17 +52,17 @@ const Navbar: FunctionComponent<NavbarProps> = ({
                   About
                 </NavLink>
               </li>
-              {user?.isBusiness && (
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    aria-current="page"
-                    to="/favcards"
-                  >
-                    Fav Cards
-                  </NavLink>
-                </li>
-              )}
+              {/* {loggedIn && ( */}
+              <li className="nav-item">
+                <NavLink
+                  className="nav-link"
+                  aria-current="page"
+                  to="/favcards"
+                >
+                  Fav Cards
+                </NavLink>
+              </li>
+              {/* )} */}
             </ul>
           </div>
           <div>
@@ -97,7 +93,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({
                   ></i>
                 )}
               </li>
-              {userManagement.loggedIn ? (
+              {user ? (
                 <>
                   <li className="nav-item">
                     <NavLink className="nav-link" to="/profile">
@@ -109,10 +105,9 @@ const Navbar: FunctionComponent<NavbarProps> = ({
                       className="btn btn-outline-info"
                       type="submit"
                       onClick={() => {
-                        navigate("/");
+                        navigate("/login");
                         localStorage.removeItem("token");
-                        userManagement.renderControl = false;
-                        setRenderControl(false);
+                        setLoggedIn(false);
                       }}
                     >
                       Logout

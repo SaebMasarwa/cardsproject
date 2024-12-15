@@ -3,14 +3,16 @@ import { FormikValues, useFormik } from "formik";
 import * as yup from "yup";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { loginUser } from "../services/usersService";
-import { userManagement } from "../hooks/useUser";
+import { UserContext } from "../context/userContext";
+import React from "react";
 
 interface LoginProps {
-  setRenderControl: (control: boolean) => void;
+  // setRenderControl: (control: boolean) => void;
 }
 
-const Login: FunctionComponent<LoginProps> = ({ setRenderControl }) => {
+const Login: FunctionComponent<LoginProps> = () => {
   const navigate: NavigateFunction = useNavigate();
+  const { loggedIn, setLoggedIn } = React.useContext(UserContext);
 
   const formik = useFormik({
     initialValues: { email: "", password: "" },
@@ -21,12 +23,9 @@ const Login: FunctionComponent<LoginProps> = ({ setRenderControl }) => {
     onSubmit: ({ email, password }: FormikValues) => {
       loginUser(email, password)
         .then((res) => {
-          console.log(res);
           if (res.data.length) {
             navigate("/");
             localStorage.setItem("token", res.data);
-            setRenderControl(true);
-            userManagement.renderControl = true;
           } else {
             alert("No such user");
           }
