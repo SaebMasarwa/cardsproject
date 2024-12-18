@@ -48,7 +48,7 @@ function App() {
       htmlElement?.setAttribute("data-bs-theme", "light");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [darkMode, user, loggedIn]);
+  }, [darkMode, user, loggedIn, searchResults]);
   return (
     <div className="App">
       <UserContext.Provider

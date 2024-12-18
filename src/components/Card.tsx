@@ -5,14 +5,14 @@ import { UserContext } from "../context/userContext";
 
 export default function Card({ card }: { card: CardType }) {
   const [showLike, setShowLike] = React.useState<boolean>(false);
-  const { user, loggedIn, setLoggedIn, searchResults, setSearchResults } =
-    useContext(UserContext);
+  const { user } = useContext(UserContext);
   const handleLike = (cardId: string) => {
-    const res = likeCard(cardId);
+    likeCard(cardId);
   };
 
   useEffect(() => {
     cardLikeStatus(card._id).then((res) => setShowLike(res));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showLike]);
 
   const handleDelete = (bizNumber: number, cardId: string) => {

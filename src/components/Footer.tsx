@@ -1,10 +1,9 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/userContext";
 
 export default function Footer() {
-  const { user, loggedIn, setLoggedIn, searchResults, setSearchResults } =
-    useContext(UserContext);
+  const { user } = useContext(UserContext);
   return (
     <div className="mt-5">
       <figure className="figure">

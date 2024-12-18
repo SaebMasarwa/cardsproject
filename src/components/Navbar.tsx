@@ -10,15 +10,20 @@ interface NavbarProps {}
 const Navbar: FunctionComponent<NavbarProps> = () => {
   const navigate: NavigateFunction = useNavigate();
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
-  const { user, loggedIn, setLoggedIn, searchResults, setSearchResults } =
-    useContext(UserContext);
+  const {
+    user,
+    setUser,
+    loggedIn,
+    setLoggedIn,
+    searchResults,
+    setSearchResults,
+  } = useContext(UserContext);
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
-    } else {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, darkMode, loggedIn]);
+  }, [user, darkMode, loggedIn, searchResults]);
 
   const handleSearch = (searchQuery: string) => {
     searchCards(searchQuery)
@@ -168,6 +173,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                       onClick={() => {
                         navigate("/login");
                         localStorage.removeItem("token");
+                        setUser(null);
                         setLoggedIn(false);
                       }}
                     >

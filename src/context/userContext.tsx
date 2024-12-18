@@ -5,7 +5,7 @@ import { User } from "../interfaces/User";
 
 interface UserContextType {
   user: User | null;
-  setUser: (user: User) => void;
+  setUser: (user: User | null) => void;
   loggedIn: boolean;
   setLoggedIn: (mode: boolean) => void;
   searchResults: any;
