@@ -8,6 +8,8 @@ interface UserContextType {
   setUser: (user: User) => void;
   loggedIn: boolean;
   setLoggedIn: (mode: boolean) => void;
+  searchResults: any;
+  setSearchResults: (results: any) => void;
 }
 
 export const UserContext = createContext<UserContextType>({
@@ -15,12 +17,15 @@ export const UserContext = createContext<UserContextType>({
   setUser: () => {},
   loggedIn: false,
   setLoggedIn: (mode: boolean) => {},
+  searchResults: null,
+  setSearchResults: (results: any) => {},
 });
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate: NavigateFunction = useNavigate();
   const [user, setUser] = React.useState<User | null>(null);
   const [loggedIn, setLoggedIn] = React.useState<boolean>(false);
+  const [searchResults, setSearchResults] = React.useState<any>(null);
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -38,10 +43,20 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           .catch((err) => console.log(err));
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, loggedIn]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, loggedIn, setLoggedIn }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        loggedIn,
+        setLoggedIn,
+        searchResults,
+        setSearchResults,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

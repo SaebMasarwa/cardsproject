@@ -27,7 +27,6 @@ export async function getCurrentUserById() {
       "x-auth-token": token,
     },
   });
-  // console.log("User (getCurrentUserById): " + JSON.stringify(user));
 
   return user;
 }

@@ -32,6 +32,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
         zip: 0,
       },
       isBusiness: false,
+      isAdmin: false,
     },
     validationSchema: yup.object({
       name: yup.object({
@@ -57,11 +58,10 @@ const Register: FunctionComponent<RegisterProps> = () => {
       isBusiness: yup.boolean(),
     }),
     onSubmit: (values: User) => {
-      // console.log(values);
       registerUser(values)
         .then((res) => {
-          navigate("/home");
           localStorage.setItem("token", res.data);
+          navigate("/");
         })
         .catch((err) => console.log(err));
     },

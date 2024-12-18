@@ -13,6 +13,8 @@ import { ThemeContext } from "./context/themeContext";
 import { UserContext } from "./context/userContext";
 import { getCurrentUserById } from "./services/usersService";
 import { User } from "./interfaces/User";
+import MyCards from "./components/MyCards";
+import SearchResults from "./components/SearchResults";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
@@ -20,6 +22,7 @@ function App() {
   );
   const [user, setUser] = useState<User | null>(null);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [searchResults, setSearchResults] = useState<any>(null);
   const htmlElement = document.querySelector("html");
 
   const toggleDarkMode = () => {
@@ -34,8 +37,6 @@ function App() {
     getCurrentUserById()
       .then((res) => {
         if (res) {
-          console.log("User in App " + JSON.stringify(res.data));
-
           setUser(res.data);
           setLoggedIn(true);
         }
@@ -47,11 +48,8 @@ function App() {
     } else {
       htmlElement?.setAttribute("data-bs-theme", "light");
     }
-    console.log("User in App Line: 47" + user);
-    console.log("LoggedIn in App " + loggedIn);
-  }, [darkMode]);
-
-  console.log("LoggedIn in App " + loggedIn);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [darkMode, user, loggedIn]);
   return (
     <div className="App">
       <UserContext.Provider
@@ -60,6 +58,8 @@ function App() {
           setUser,
           loggedIn,
           setLoggedIn,
+          searchResults,
+          setSearchResults,
         }}
       >
         <ThemeContext.Provider
@@ -73,9 +73,11 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/favcards" element={<FavCards />} />
+              <Route path="/mycards" element={<MyCards />} />
               <Route path="/login" element={<Login />} />
               <Route path="/about" element={<About />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/search" element={<SearchResults />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
             <Footer />

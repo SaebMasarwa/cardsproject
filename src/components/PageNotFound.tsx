@@ -6,7 +6,7 @@ const PageNotFound: FunctionComponent<PageNotFoundProps> = () => {
   return (
     <div className="display-5">
       404 - PAGE NOT FOUND
-      <img src="./404.png" />
+      <img src="./404.png" alt="Page Not Found" />
     </div>
   );
 };

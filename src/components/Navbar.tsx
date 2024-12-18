@@ -1,25 +1,57 @@
 import { FunctionComponent, useContext, useEffect } from "react";
-import { NavigateFunction, NavLink, useNavigate } from "react-router-dom";
-// import { User } from "../interfaces/User";
+import {
+  NavigateFunction,
+  NavLink,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { ThemeContext } from "../context/themeContext";
 import { UserContext } from "../context/userContext";
+import React from "react";
+import { searchCards } from "../services/cardsService";
+import { CardType } from "../interfaces/Card";
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = () => {
   const navigate: NavigateFunction = useNavigate();
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
-  const { user, setUser, loggedIn, setLoggedIn } = useContext(UserContext);
+  const { user, loggedIn, setLoggedIn, searchResults, setSearchResults } =
+    useContext(UserContext);
+
+  // const [cards, setCards] = React.useState<CardType[] | null>(null);
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     } else {
-      navigate("/");
+      // navigate("/");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, darkMode, loggedIn]);
 
-  console.log("User in Navbar: " + user);
-  console.log("LoggedIn in Navbar: " + loggedIn);
+  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const form = e.target as HTMLFormElement;
+  //   const input = form.querySelector("input[type='text']") as HTMLInputElement;
+  //   navigate("/search?q=" + input.value);
+  // };
+
+  const handleSearch = (searchQuery: string) => {
+    // const searchQuery = searchParams.get("q") || "";
+    // console.log(searchQuery);
+
+    searchCards(searchQuery)
+      .then((res) => {
+        if (res) {
+          // setCards(res);
+          setSearchResults(res);
+        } else {
+          // setCards([]);
+          setSearchResults([]);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -51,7 +83,29 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   About
                 </NavLink>
               </li>
-              {loggedIn && (
+              {user?.isAdmin === false && user?.isBusiness === true && (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      aria-current="page"
+                      to="/favcards"
+                    >
+                      Fav Cards
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      aria-current="page"
+                      to="/mycards"
+                    >
+                      My Cards
+                    </NavLink>
+                  </li>
+                </>
+              )}
+              {user?.isAdmin === false && user.isBusiness === false && (
                 <li className="nav-item">
                   <NavLink
                     className="nav-link"
@@ -62,21 +116,63 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   </NavLink>
                 </li>
               )}
+              {user?.isAdmin && user.isBusiness && (
+                <>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      aria-current="page"
+                      to="/favcards"
+                    >
+                      Fav Cards
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      aria-current="page"
+                      to="/mycards"
+                    >
+                      My Cards
+                    </NavLink>
+                  </li>
+                  <li className="nav-item">
+                    <NavLink
+                      className="nav-link"
+                      aria-current="page"
+                      to="/sandbox"
+                    >
+                      Sandbox
+                    </NavLink>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <div>
             <ul className="d-flex navbar-nav  mb-2 mb-lg-0 align-items-center">
-              <form className="d-flex" role="search">
-                <input
-                  className="form-control me-2"
-                  type="search"
-                  placeholder="Search"
-                  aria-label="Search"
-                />
-                <button className="btn btn-outline-success me-3" type="submit">
+              {/* <form className="d-flex" role="search" onSubmit={handleSubmit}> */}
+              <input
+                className="form-control me-2"
+                type="text"
+                // value={searchResults}
+                // onChange={(e) => setSearchResults(e.target.value)}
+                placeholder="Search"
+                aria-label="Search"
+                onChange={(e) => {
+                  handleSearch(e.target.value);
+                }}
+              />
+              {/* <button
+                  className="btn btn-outline-success me-3"
+                  type="submit"
+                  // onClick={() => {
+                  //   navigate("/search?q=" + searchResults);
+                  // }}
+                >
                   Search
-                </button>
-              </form>
+                </button> */}
+              {/* </form> */}
               <li className="nav-item">
                 {localStorage.getItem("darkMode") === "true" ? (
                   <i

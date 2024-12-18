@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import Navbar from "./Navbar";
 
 interface AboutProps {}
 
