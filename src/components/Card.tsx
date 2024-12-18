@@ -21,58 +21,61 @@ export default function Card({ card }: { card: CardType }) {
 
   return (
     <>
-      <div className="card m-3" style={{ width: "18rem" }} key={card._id}>
+      <div
+        className="card m-3 d-flex"
+        style={{ width: "18rem" }}
+        key={card._id}
+      >
         <img
-          src={card.image.url}
+          src={card.image.url ? card.image.url : ""}
           className="card-img-top"
           alt={card.image.alt}
         />
         <div className="card-body">
           <h5 className="card-title">{card.title}</h5>
           <p className="card-text">{card.description}</p>
-          {user?.isAdmin && (
-            <a
-              href="
+          <div className="d-flex justify-content-center align-items-end">
+            {user?.isAdmin && (
+              <a
+                href="
             "
-              className="btn btn-outline-primary ms-3"
-              onClick={() => {
-                handleDelete(card.bizNumber, card._id);
-              }}
-            >
-              <i className="bi bi-trash"></i>
+                className="btn btn-outline-info me-3"
+                onClick={() => {
+                  handleDelete(card.bizNumber, card._id);
+                }}
+              >
+                <i className="bi bi-trash"></i>
+              </a>
+            )}
+            <a href={`tel:${card.phone}`} className="btn btn-outline-info me-3">
+              <i className="bi bi-telephone-fill"></i>
             </a>
-          )}
-          <a
-            href={`tel:${card.phone}`}
-            className="btn btn-outline-primary ms-3"
-          >
-            <i className="bi bi-telephone-fill"></i>
-          </a>
-          {user?.isBusiness && showLike ? (
-            <a
-              href="
+            {user?.isBusiness && showLike ? (
+              <a
+                href="
             "
-              className="btn btn-outline-primary ms-3"
-              onClick={() => {
-                handleLike(card._id);
-                setShowLike(false);
-              }}
-            >
-              <i className="bi bi-heart-fill"></i>
-            </a>
-          ) : (
-            <a
-              href="
+                className="btn btn-outline-info me-3"
+                onClick={() => {
+                  handleLike(card._id);
+                  setShowLike(false);
+                }}
+              >
+                <i className="bi bi-heart-fill"></i>
+              </a>
+            ) : (
+              <a
+                href="
             "
-              className="btn btn-outline-primary ms-3"
-              onClick={() => {
-                handleLike(card._id);
-                setShowLike(true);
-              }}
-            >
-              <i className="bi bi-heart"></i>
-            </a>
-          )}
+                className="btn btn-outline-info me-3"
+                onClick={() => {
+                  handleLike(card._id);
+                  setShowLike(true);
+                }}
+              >
+                <i className="bi bi-heart"></i>
+              </a>
+            )}
+          </div>
         </div>
       </div>
     </>

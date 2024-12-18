@@ -14,7 +14,6 @@ import { UserContext } from "./context/userContext";
 import { getCurrentUserById } from "./services/usersService";
 import { User } from "./interfaces/User";
 import MyCards from "./components/MyCards";
-import SearchResults from "./components/SearchResults";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
@@ -77,7 +76,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/about" element={<About />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/search" element={<SearchResults />} />
+              {/* <Route path="/search" element={<SearchResults />} /> */}
               <Route path="*" element={<PageNotFound />} />
             </Routes>
             <Footer />

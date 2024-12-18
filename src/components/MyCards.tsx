@@ -18,10 +18,14 @@ const MyCards: FunctionComponent<MyCardsProps> = () => {
 
   return (
     <>
-      <div className="display-3">Cards Page</div>
+      <div className="display-3">My Cards Page</div>
       <div className="d-flex flex-wrap">
         {myCards?.map((card: CardType) => {
-          return <Card card={card} key={card._id} />;
+          return (
+            <div className="mx-auto">
+              <Card card={card} key={card._id} />
+            </div>
+          );
         })}
       </div>
     </>

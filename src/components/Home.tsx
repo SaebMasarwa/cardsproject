@@ -8,10 +8,12 @@ import { getAllCards } from "../services/cardsService";
 import { CardType } from "../interfaces/Card";
 import Card from "./Card";
 import { UserContext } from "../context/userContext";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 
 interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
+  const navigate: NavigateFunction = useNavigate();
   const { searchResults, setSearchResults } = useContext(UserContext);
   const [cards, setCards] = useState<CardType[] | null>(null);
 

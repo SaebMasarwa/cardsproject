@@ -23,7 +23,7 @@ function FavCards() {
             );
           })
         ) : (
-          <div className="display-3 text-danger">No cards found</div>
+          <div className="display-3 text-danger mx-auto">No cards found</div>
         )}
       </div>
     </>
