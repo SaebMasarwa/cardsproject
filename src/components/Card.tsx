@@ -2,10 +2,12 @@ import React, { useContext, useEffect } from "react";
 import type { CardType } from "../interfaces/Card";
 import { cardLikeStatus, deleteCard, likeCard } from "../services/cardsService";
 import { UserContext } from "../context/userContext";
+import { useSelector } from "react-redux";
 
 export default function Card({ card }: { card: CardType }) {
   const [showLike, setShowLike] = React.useState<boolean>(false);
-  const { user } = useContext(UserContext);
+  // const { user } = useContext(UserContext);
+  let user = useSelector((state: any) => state.usersState.users);
   const handleLike = (cardId: string) => {
     likeCard(cardId);
   };

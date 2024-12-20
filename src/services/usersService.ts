@@ -17,16 +17,19 @@ export async function registerUser(user: User) {
 
 // Get current user
 export async function getCurrentUserById() {
-  const token = localStorage.getItem("token");
-  if (!token) return Promise.resolve(null);
-  const decoded = jwtDecode<ExtendedjwrPayload>(token as string);
-  const userId = decoded._id;
-  // console.log("User ID (getCurrentUserById): " + decoded._id);
-  const user = await axios.get(`${api}/${userId}`, {
-    headers: {
-      "x-auth-token": token,
-    },
-  });
+  try {
+    const token = localStorage.getItem("token");
+    const decoded = jwtDecode<ExtendedjwrPayload>(token as string);
+    const userId = decoded._id;
+    const user = await axios.get(`${api}/${userId}`, {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
 
-  return user;
+    return user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }

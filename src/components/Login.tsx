@@ -1,14 +1,30 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext, useEffect } from "react";
 import { FormikValues, useFormik } from "formik";
 import * as yup from "yup";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import { loginUser } from "../services/usersService";
+import { getCurrentUserById, loginUser } from "../services/usersService";
 import React from "react";
+import { UserContext } from "../context/userContext";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserAction, UsersAction } from "../redux/UsersState";
+import { Dispatch } from "redux";
 
 interface LoginProps {}
 
 const Login: FunctionComponent<LoginProps> = () => {
   const navigate: NavigateFunction = useNavigate();
+  let user = useSelector((state: any) => state.usersState.user);
+  const dispatch = useDispatch<Dispatch<UsersAction>>();
+  console.log("User in login from Redux: " + user);
+
+  const {
+    // user,
+    // setUser,
+    // loggedIn,
+    // setLoggedIn,
+    searchResults,
+    setSearchResults,
+  } = useContext(UserContext);
 
   const formik = useFormik({
     initialValues: { email: "", password: "" },
@@ -20,15 +36,30 @@ const Login: FunctionComponent<LoginProps> = () => {
       loginUser(email, password)
         .then((res) => {
           if (res.data.length) {
-            navigate("/");
             localStorage.setItem("token", res.data);
           } else {
             alert("No such user");
           }
         })
         .catch((err) => console.log(err));
+
+      getCurrentUserById()
+        .then((res) => {
+          if (res) {
+            dispatch(setUserAction(res.data));
+            console.log("User in login from Redux: " + user);
+            navigate("/");
+
+            // setUser(res.data);
+            // setLoggedIn(true);
+          }
+        })
+        .catch((err) => console.log(err));
     },
   });
+
+  useEffect(() => {}, [user, searchResults]);
+
   return (
     <div className="container w-25">
       <h5 className="display-5 my-2">LOGIN</h5>

@@ -70,10 +70,10 @@ export async function likeCard(cardId: string) {
 
 // Get like status of a card
 export async function cardLikeStatus(cardId: string) {
-  const token = localStorage.getItem("token");
-  const decoded = jwtDecode<ExtendedjwrPayload>(token as string);
-  const userId = decoded._id;
   try {
+    const token = localStorage.getItem("token");
+    const decoded = jwtDecode<ExtendedjwrPayload>(token as string);
+    const userId = decoded._id;
     const res = await axios.get(`${api}/${cardId}`, {
       headers: {
         "x-auth-token": token,

@@ -3,11 +3,21 @@ import { getFavCards } from "../services/cardsService";
 import { CardType } from "../interfaces/Card";
 import Card from "./Card";
 
+import { useDispatch, useSelector } from "react-redux";
+
+import { Dispatch } from "redux";
+import { CardsAction, setMyFavCardsAction } from "../redux/CardsState";
+
 function FavCards() {
-  const [myFavCards, setMyFavCards] = useState<CardType[] | null>(null);
+  // const [myFavCards, setMyFavCards] = useState<CardType[] | null>(null);
+  let myFavCards = useSelector((state: any) => state.cardsState.cards);
+  const dispatch = useDispatch<Dispatch<CardsAction>>();
 
   useEffect(() => {
-    getFavCards().then((res) => setMyFavCards(res || []));
+    getFavCards().then((res) => {
+      console.log(res);
+      dispatch(setMyFavCardsAction(res || []));
+    });
   }, []);
 
   return (

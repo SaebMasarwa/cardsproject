@@ -4,6 +4,9 @@ import { ThemeContext } from "../context/themeContext";
 import { UserContext } from "../context/userContext";
 import React from "react";
 import { searchCards } from "../services/cardsService";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
+import { setUserAction, UsersAction } from "../redux/UsersState";
 
 interface NavbarProps {}
 
@@ -11,19 +14,24 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   const navigate: NavigateFunction = useNavigate();
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const {
-    user,
-    setUser,
-    loggedIn,
-    setLoggedIn,
+    // user,
+    // setUser,
+    // loggedIn,
+    // setLoggedIn,
     searchResults,
     setSearchResults,
   } = useContext(UserContext);
+  // const user = useUserContext();
+
+  let user = useSelector((state: any) => state.usersState.users);
+  const dispatch = useDispatch<Dispatch<UsersAction>>();
+
   useEffect(() => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, darkMode, loggedIn, searchResults]);
+  }, [darkMode, searchResults]);
 
   const handleSearch = (searchQuery: string) => {
     searchCards(searchQuery)
@@ -67,6 +75,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   About
                 </NavLink>
               </li>
+              {/* {loggedIn && <h1>{loggedIn}</h1>} */}
               {user?.isAdmin === false && user?.isBusiness === true && (
                 <>
                   <li className="nav-item">
@@ -171,10 +180,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                       className="btn btn-outline-info"
                       type="submit"
                       onClick={() => {
-                        navigate("/login");
                         localStorage.removeItem("token");
-                        setUser(null);
-                        setLoggedIn(false);
+                        dispatch(setUserAction(null));
+                        navigate("/login");
                       }}
                     >
                       Logout

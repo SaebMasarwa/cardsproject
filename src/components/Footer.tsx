@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/userContext";
+import { useSelector } from "react-redux";
 
 export default function Footer() {
-  const { user } = useContext(UserContext);
+  // const { user } = useContext(UserContext);
+  let user = useSelector((state: any) => state.usersState.users);
   return (
     <div className="mt-5">
       <figure className="figure">
