@@ -5,23 +5,23 @@ import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { getCurrentUserById, loginUser } from "../services/usersService";
 import React from "react";
 import { UserContext } from "../context/userContext";
-import { useSelector, useDispatch } from "react-redux";
-import { setUserAction, UsersAction } from "../redux/UsersState";
-import { Dispatch } from "redux";
+// import { useSelector, useDispatch } from "react-redux";
+// import { setUserAction, UsersAction } from "../redux/UsersState";
+// import { Dispatch } from "redux";
 
 interface LoginProps {}
 
 const Login: FunctionComponent<LoginProps> = () => {
   const navigate: NavigateFunction = useNavigate();
-  let user = useSelector((state: any) => state.usersState.user);
-  const dispatch = useDispatch<Dispatch<UsersAction>>();
-  console.log("User in login from Redux: " + user);
+  // let user = useSelector((state: any) => state.usersState.user);
+  // const dispatch = useDispatch<Dispatch<UsersAction>>();
+  // console.log("User in login from Redux: " + user);
 
   const {
-    // user,
-    // setUser,
-    // loggedIn,
-    // setLoggedIn,
+    user,
+    setUser,
+    loggedIn,
+    setLoggedIn,
     searchResults,
     setSearchResults,
   } = useContext(UserContext);
@@ -37,28 +37,28 @@ const Login: FunctionComponent<LoginProps> = () => {
         .then((res) => {
           if (res.data.length) {
             localStorage.setItem("token", res.data);
+            setLoggedIn(true);
+            getCurrentUserById().then((res) => {
+              if (res) {
+                setUser(res.data);
+                if (user) {
+                  navigate("/");
+                }
+              }
+            });
           } else {
             alert("No such user");
-          }
-        })
-        .catch((err) => console.log(err));
-
-      getCurrentUserById()
-        .then((res) => {
-          if (res) {
-            dispatch(setUserAction(res.data));
-            console.log("User in login from Redux: " + user);
-            navigate("/");
-
-            // setUser(res.data);
-            // setLoggedIn(true);
           }
         })
         .catch((err) => console.log(err));
     },
   });
 
-  useEffect(() => {}, [user, searchResults]);
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <div className="container w-25">

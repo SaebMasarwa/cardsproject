@@ -6,17 +6,21 @@ import { UserContext } from "../context/userContext";
 import { useDispatch, useSelector } from "react-redux";
 import { CardsAction, setAllCardsAction } from "../redux/CardsState";
 import { Dispatch } from "redux";
-import { UsersAction } from "../redux/UsersState";
 
 interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
-  const { searchResults } = useContext(UserContext);
+  const {
+    user,
+    setUser,
+    loggedIn,
+    setLoggedIn,
+    searchResults,
+    setSearchResults,
+  } = useContext(UserContext);
   // const [cards, setCards] = useState<CardType[] | null>(null);
   let cards = useSelector((state: any) => state.cardsState.cards);
   const dispatch = useDispatch<Dispatch<CardsAction>>();
-  let user = useSelector((state: any) => state.usersState.users);
-  // const dispatchUsers = useDispatch<Dispatch<UsersAction>>();
 
   useEffect(() => {
     getAllCards().then((res) => dispatch(setAllCardsAction(res.data)));
@@ -28,7 +32,6 @@ const Home: FunctionComponent<HomeProps> = () => {
         <>
           <div className="display-3">Search Results Page</div>
           <div className="container-fluid">
-            {user}
             <div className="d-flex flex-wrap">
               {searchResults.map((card: CardType) => {
                 return (

@@ -13,22 +13,22 @@ import { ThemeContext } from "./context/themeContext";
 import { UserContext } from "./context/userContext";
 import { getCurrentUserById } from "./services/usersService";
 import MyCards from "./components/MyCards";
-import { useDispatch, useSelector } from "react-redux";
-import { Dispatch } from "redux";
-import { setUserAction, UsersAction } from "./redux/UsersState";
+// import { useDispatch, useSelector } from "react-redux";
+// import { Dispatch } from "redux";
+// import { setUserAction, UsersAction } from "./redux/UsersState";
+import { User } from "./interfaces/User";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
     localStorage.getItem("darkMode") === "true" ? true : false
   );
-  // const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  // localStorage.token !== undefined ? true : false
   const [searchResults, setSearchResults] = useState<any>(null);
   const htmlElement = document.querySelector("html");
 
-  let user = useSelector((state: any) => state.usersState.users);
-  const dispatch = useDispatch<Dispatch<UsersAction>>();
+  // let user = useSelector((state: any) => state.usersState.user);
+  // const dispatch = useDispatch<Dispatch<UsersAction>>();
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -42,9 +42,8 @@ function App() {
     getCurrentUserById()
       .then((res) => {
         if (res) {
-          // setUser(res.data);
-          dispatch(setUserAction(res.data));
-          setLoggedIn(true);
+          setUser(res.data);
+          // dispatch(setUserAction(res.data));
         }
       })
       .catch((err) => console.log(err));
@@ -55,7 +54,7 @@ function App() {
       htmlElement?.setAttribute("data-bs-theme", "light");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [darkMode, loggedIn, searchResults]);
+  }, [darkMode, searchResults]);
   return (
     // <Provider store={store}>
     <ThemeContext.Provider
@@ -66,15 +65,14 @@ function App() {
     >
       <UserContext.Provider
         value={{
-          // user,
-          // setUser,
-          // loggedIn,
-          // setLoggedIn,
+          user,
+          setUser,
+          loggedIn,
+          setLoggedIn,
           searchResults,
           setSearchResults,
         }}
       >
-        {/* <Provider store={store}> */}
         <div className="App">
           <Router>
             <Navbar />
@@ -90,7 +88,6 @@ function App() {
             <Footer />
           </Router>
         </div>
-        {/* </Provider> */}
       </UserContext.Provider>
     </ThemeContext.Provider>
   );

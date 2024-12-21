@@ -1,19 +1,22 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
 import { useFormik } from "formik";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { registerUser } from "../services/usersService";
+import { getCurrentUserById, registerUser } from "../services/usersService";
 import { User } from "../interfaces/User";
-import { setUserAction, UsersAction } from "../redux/UsersState";
-import { useDispatch, useSelector } from "react-redux";
-import { Dispatch } from "redux";
+import { UserContext } from "../context/userContext";
+// import { setUserAction, UsersAction } from "../redux/UsersState";
+// import { useDispatch, useSelector } from "react-redux";
+// import { Dispatch } from "redux";
+// import { setUser } from "../redux/UserSlice";
 
 interface RegisterProps {}
 
 const Register: FunctionComponent<RegisterProps> = () => {
   const navigate: NavigateFunction = useNavigate();
-  let user = useSelector((state: any) => state.usersState.user);
-  const dispatch = useDispatch<Dispatch<UsersAction>>();
+  const { user, setUser } = useContext(UserContext);
+  // let user = useSelector((state: any) => state.usersState.user);
+  // const dispatch = useDispatch<Dispatch<UsersAction>>();
   const formik = useFormik({
     initialValues: {
       name: {
@@ -66,7 +69,9 @@ const Register: FunctionComponent<RegisterProps> = () => {
       registerUser(values)
         .then((res) => {
           localStorage.setItem("token", res.data);
-          dispatch(setUserAction(res.data));
+          getCurrentUserById().then((res) => setUser(res?.data));
+          // setUser(res.data);
+          // dispatch(setUserAction(res.data));
           navigate("/");
         })
         .catch((err) => console.log(err));

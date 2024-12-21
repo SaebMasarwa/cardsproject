@@ -1,12 +1,9 @@
 import { FunctionComponent, useContext, useEffect } from "react";
 import { NavigateFunction, NavLink, useNavigate } from "react-router-dom";
 import { ThemeContext } from "../context/themeContext";
-import { UserContext } from "../context/userContext";
+import { UserContext, useUserContext } from "../context/userContext";
 import React from "react";
 import { searchCards } from "../services/cardsService";
-import { useDispatch, useSelector } from "react-redux";
-import { Dispatch } from "redux";
-import { setUserAction, UsersAction } from "../redux/UsersState";
 
 interface NavbarProps {}
 
@@ -14,17 +11,13 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   const navigate: NavigateFunction = useNavigate();
   const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const {
-    // user,
-    // setUser,
-    // loggedIn,
-    // setLoggedIn,
+    user,
+    setUser,
+    loggedIn,
+    setLoggedIn,
     searchResults,
     setSearchResults,
   } = useContext(UserContext);
-  // const user = useUserContext();
-
-  let user = useSelector((state: any) => state.usersState.users);
-  const dispatch = useDispatch<Dispatch<UsersAction>>();
 
   useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -75,18 +68,19 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   About
                 </NavLink>
               </li>
-              {/* {loggedIn && <h1>{loggedIn}</h1>} */}
-              {user?.isAdmin === false && user?.isBusiness === true && (
+              {user !== null && (
+                <li className="nav-item">
+                  <NavLink
+                    className="nav-link"
+                    aria-current="page"
+                    to="/favcards"
+                  >
+                    Fav Cards
+                  </NavLink>
+                </li>
+              )}
+              {user?.isBusiness && (
                 <>
-                  <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      aria-current="page"
-                      to="/favcards"
-                    >
-                      Fav Cards
-                    </NavLink>
-                  </li>
                   <li className="nav-item">
                     <NavLink
                       className="nav-link"
@@ -98,37 +92,9 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                   </li>
                 </>
               )}
-              {user?.isAdmin === false && user.isBusiness === false && (
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    aria-current="page"
-                    to="/favcards"
-                  >
-                    Fav Cards
-                  </NavLink>
-                </li>
-              )}
-              {user?.isAdmin && user.isBusiness && (
+
+              {user?.isAdmin && (
                 <>
-                  <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      aria-current="page"
-                      to="/favcards"
-                    >
-                      Fav Cards
-                    </NavLink>
-                  </li>
-                  <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      aria-current="page"
-                      to="/mycards"
-                    >
-                      My Cards
-                    </NavLink>
-                  </li>
                   <li className="nav-item">
                     <NavLink
                       className="nav-link"
@@ -181,7 +147,8 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                       type="submit"
                       onClick={() => {
                         localStorage.removeItem("token");
-                        dispatch(setUserAction(null));
+                        // dispatch(setUserAction(null));
+                        setUser(null);
                         navigate("/login");
                       }}
                     >
