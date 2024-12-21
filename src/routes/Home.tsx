@@ -1,7 +1,7 @@
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import { FunctionComponent, useContext, useEffect } from "react";
 import { getAllCards } from "../services/cardsService";
 import { CardType } from "../interfaces/Card";
-import Card from "./Card";
+import Card from "../components/Card";
 import { UserContext } from "../context/userContext";
 import { useDispatch, useSelector } from "react-redux";
 import { CardsAction, setAllCardsAction } from "../redux/CardsState";
@@ -18,7 +18,6 @@ const Home: FunctionComponent<HomeProps> = () => {
     searchResults,
     setSearchResults,
   } = useContext(UserContext);
-  // const [cards, setCards] = useState<CardType[] | null>(null);
   let cards = useSelector((state: any) => state.cardsState.cards);
   const dispatch = useDispatch<Dispatch<CardsAction>>();
 

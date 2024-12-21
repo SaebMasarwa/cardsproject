@@ -20,9 +20,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
   } = useContext(UserContext);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
-      navigate("/login");
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [darkMode, searchResults]);
 
@@ -142,18 +139,19 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
                     </NavLink>
                   </li>
                   <li className="nav-item">
-                    <button
-                      className="btn btn-outline-info"
+                    <NavLink
+                      to={"/login"}
+                      className="nav-link"
                       type="submit"
                       onClick={() => {
                         localStorage.removeItem("token");
                         // dispatch(setUserAction(null));
                         setUser(null);
-                        navigate("/login");
+                        // navigate("/login");
                       }}
                     >
                       Logout
-                    </button>
+                    </NavLink>
                   </li>
                 </>
               ) : (

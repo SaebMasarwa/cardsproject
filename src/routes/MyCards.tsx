@@ -2,7 +2,7 @@ import { FunctionComponent, useEffect } from "react";
 import { getMyCards } from "../services/cardsService";
 import React from "react";
 import { CardType } from "../interfaces/Card";
-import Card from "./Card";
+import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { CardsAction, setMyCardsAction } from "../redux/CardsState";

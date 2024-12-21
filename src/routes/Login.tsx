@@ -37,13 +37,11 @@ const Login: FunctionComponent<LoginProps> = () => {
         .then((res) => {
           if (res.data.length) {
             localStorage.setItem("token", res.data);
-            setLoggedIn(true);
+            // setLoggedIn(true);
             getCurrentUserById().then((res) => {
               if (res) {
                 setUser(res.data);
-                if (user) {
-                  navigate("/");
-                }
+                setLoggedIn(true);
               }
             });
           } else {
@@ -61,7 +59,7 @@ const Login: FunctionComponent<LoginProps> = () => {
   }, []);
 
   return (
-    <div className="container w-25">
+    <div className="container-md w-50">
       <h5 className="display-5 my-2">LOGIN</h5>
       <form onSubmit={formik.handleSubmit}>
         <div className="form-floating mb-3">

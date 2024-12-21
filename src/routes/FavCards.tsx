@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { getFavCards } from "../services/cardsService";
 import { CardType } from "../interfaces/Card";
-import Card from "./Card";
+import Card from "../components/Card";
 
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";

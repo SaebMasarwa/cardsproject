@@ -2,19 +2,21 @@ import React, { useContext, useEffect } from "react";
 import type { CardType } from "../interfaces/Card";
 import { cardLikeStatus, deleteCard, likeCard } from "../services/cardsService";
 import { UserContext } from "../context/userContext";
+import { NavLink } from "react-router-dom";
+import LikeButton from "./LikeButton";
 // import { useSelector } from "react-redux";
 
 export default function Card({ card }: { card: CardType }) {
-  const [showLike, setShowLike] = React.useState<boolean>(false);
-  const { user } = useContext(UserContext);
-  const handleLike = (cardId: string) => {
-    likeCard(cardId);
-  };
+  // const [showLike, setShowLike] = React.useState<boolean>(false);
+  const { user, loggedIn } = useContext(UserContext);
+  // const handleLike = (cardId: string) => {
+  //   likeCard(cardId);
+  // };
 
   useEffect(() => {
-    cardLikeStatus(card._id).then((res) => setShowLike(res));
+    // cardLikeStatus(card._id).then((res) => setShowLike(res));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showLike]);
+  }, []);
 
   const handleDelete = (bizNumber: number, cardId: string) => {
     deleteCard(bizNumber, cardId);
@@ -28,7 +30,7 @@ export default function Card({ card }: { card: CardType }) {
         key={card._id}
       >
         <img
-          src={card.image.url ? card.image.url : ""}
+          src={card.image.url}
           className="card-img-top"
           alt={card.image.alt}
         />
@@ -37,8 +39,8 @@ export default function Card({ card }: { card: CardType }) {
           <p className="card-text">{card.description}</p>
           <div className="d-flex justify-content-center align-items-end">
             {user?.isAdmin && (
-              <a
-                href="
+              <NavLink
+                to="
             "
                 className="btn btn-outline-info me-3"
                 onClick={() => {
@@ -46,36 +48,15 @@ export default function Card({ card }: { card: CardType }) {
                 }}
               >
                 <i className="bi bi-trash"></i>
-              </a>
+              </NavLink>
             )}
-            <a href={`tel:${card.phone}`} className="btn btn-outline-info me-3">
+            <NavLink
+              to={`tel:${card.phone}`}
+              className="btn btn-outline-info me-3"
+            >
               <i className="bi bi-telephone-fill"></i>
-            </a>
-            {user?.isBusiness && showLike ? (
-              <a
-                href="
-            "
-                className="btn btn-outline-info me-3"
-                onClick={() => {
-                  handleLike(card._id);
-                  setShowLike(false);
-                }}
-              >
-                <i className="bi bi-heart-fill"></i>
-              </a>
-            ) : (
-              <a
-                href="
-            "
-                className="btn btn-outline-info me-3"
-                onClick={() => {
-                  handleLike(card._id);
-                  setShowLike(true);
-                }}
-              >
-                <i className="bi bi-heart"></i>
-              </a>
-            )}
+            </NavLink>
+            {user && <LikeButton cardId={card._id} />}
           </div>
         </div>
       </div>

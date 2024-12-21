@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import PageNotFound from "./components/PageNotFound";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Home from "./components/Home";
-import About from "./components/About";
+import Login from "./routes/Login";
+import Register from "./routes/Register";
+import Home from "./routes/Home";
+import About from "./routes/About";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import FavCards from "./components/FavCards";
+import FavCards from "./routes/FavCards";
 import { ThemeContext } from "./context/themeContext";
 import { UserContext } from "./context/userContext";
 import { getCurrentUserById } from "./services/usersService";
-import MyCards from "./components/MyCards";
+import MyCards from "./routes/MyCards";
 // import { useDispatch, useSelector } from "react-redux";
 // import { Dispatch } from "redux";
 // import { setUserAction, UsersAction } from "./redux/UsersState";
@@ -43,6 +43,7 @@ function App() {
       .then((res) => {
         if (res) {
           setUser(res.data);
+          setLoggedIn(true);
           // dispatch(setUserAction(res.data));
         }
       })
