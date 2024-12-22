@@ -3,32 +3,18 @@ import { FormikValues, useFormik } from "formik";
 import * as yup from "yup";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { getCurrentUserById, loginUser } from "../services/usersService";
-import React from "react";
 import { UserContext } from "../context/userContext";
 import {
   reactToastifyError,
   reactToastifySuccess,
 } from "../misc/reactToastify";
-// import { useSelector, useDispatch } from "react-redux";
-// import { setUserAction, UsersAction } from "../redux/UsersState";
-// import { Dispatch } from "redux";
 
 interface LoginProps {}
 
 const Login: FunctionComponent<LoginProps> = () => {
   const navigate: NavigateFunction = useNavigate();
-  // let user = useSelector((state: any) => state.usersState.user);
-  // const dispatch = useDispatch<Dispatch<UsersAction>>();
-  // console.log("User in login from Redux: " + user);
 
-  const {
-    user,
-    setUser,
-    loggedIn,
-    setLoggedIn,
-    searchResults,
-    setSearchResults,
-  } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
   const formik = useFormik({
     initialValues: { email: "", password: "" },
@@ -49,7 +35,6 @@ const Login: FunctionComponent<LoginProps> = () => {
               }
             });
           } else {
-            // alert("No such user");
             reactToastifyError("No such user");
           }
         })
@@ -61,6 +46,7 @@ const Login: FunctionComponent<LoginProps> = () => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

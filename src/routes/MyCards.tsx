@@ -18,6 +18,7 @@ const MyCards: FunctionComponent<MyCardsProps> = () => {
     getMyCards().then((res) => {
       dispatch(setMyCardsAction(res as CardType[]));
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

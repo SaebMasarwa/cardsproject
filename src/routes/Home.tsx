@@ -18,6 +18,7 @@ const Home: FunctionComponent<HomeProps> = () => {
 
   useEffect(() => {
     getAllCards().then((res) => dispatch(setAllCardsAction(res.data)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = (searchQuery: string) => {
@@ -26,9 +27,6 @@ const Home: FunctionComponent<HomeProps> = () => {
         if (res) {
           setSearchResults(res);
         }
-        // else {
-        //   // setSearchResults([]);
-        // }
       })
       .catch((err) => {
         console.log(err);

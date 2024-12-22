@@ -1,22 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import { useContext } from "react";
 import type { CardType } from "../interfaces/Card";
 import { deleteCard } from "../services/cardsService";
 import { UserContext } from "../context/userContext";
 import { NavLink } from "react-router-dom";
 import LikeButton from "./LikeButton";
-// import { useSelector } from "react-redux";
 
 export default function Card({ card }: { card: CardType }) {
-  // const [showLike, setShowLike] = React.useState<boolean>(false);
   const { user } = useContext(UserContext);
-  // const handleLike = (cardId: string) => {
-  //   likeCard(cardId);
-  // };
-
-  useEffect(() => {
-    // cardLikeStatus(card._id).then((res) => setShowLike(res));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleDelete = (bizNumber: number, cardId: string) => {
     deleteCard(bizNumber, cardId);
@@ -56,7 +46,10 @@ export default function Card({ card }: { card: CardType }) {
             "
                 className="btn btn-outline-info me-3"
                 onClick={() => {
-                  handleDelete(card.bizNumber as number, card._id as string);
+                  window.confirm(
+                    "Are you sure you want to delete this card?"
+                  ) &&
+                    handleDelete(card.bizNumber as number, card._id as string);
                 }}
               >
                 <i className="bi bi-trash"></i>

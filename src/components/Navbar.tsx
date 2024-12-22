@@ -1,27 +1,13 @@
-import { FunctionComponent, useContext, useEffect } from "react";
-import { NavigateFunction, NavLink, useNavigate } from "react-router-dom";
+import { FunctionComponent, useContext } from "react";
+import { NavLink } from "react-router-dom";
 import { ThemeContext } from "../context/themeContext";
-import { UserContext, useUserContext } from "../context/userContext";
-import React from "react";
-import { searchCards } from "../services/cardsService";
+import { UserContext } from "../context/userContext";
 
 interface NavbarProps {}
 
 const Navbar: FunctionComponent<NavbarProps> = () => {
-  const navigate: NavigateFunction = useNavigate();
-  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
-  const {
-    user,
-    setUser,
-    loggedIn,
-    setLoggedIn,
-    searchResults,
-    setSearchResults,
-  } = useContext(UserContext);
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [darkMode, searchResults]);
+  const { toggleDarkMode } = useContext(ThemeContext);
+  const { user, setUser } = useContext(UserContext);
 
   return (
     <>
@@ -152,7 +138,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
             </div>
           </div>
         </div>
-        {/* </div> */}
       </nav>
     </>
   );

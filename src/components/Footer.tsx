@@ -1,11 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
-import { toast } from "react-toastify";
-import {
-  reactToastifyError,
-  reactToastifySuccess,
-} from "../misc/reactToastify";
 
 export default function Footer() {
   const { user } = useContext(UserContext);

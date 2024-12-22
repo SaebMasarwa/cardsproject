@@ -13,9 +13,9 @@ function FavCards() {
 
   useEffect(() => {
     getFavCards().then((res) => {
-      console.log(res);
       dispatch(setMyFavCardsAction(res || []));
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

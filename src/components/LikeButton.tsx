@@ -1,5 +1,4 @@
 import { FunctionComponent, useEffect } from "react";
-import { useUserContext } from "../context/userContext";
 import { cardLikeStatus, likeCard } from "../services/cardsService";
 import React from "react";
 import { NavLink } from "react-router-dom";
@@ -9,7 +8,6 @@ interface LikeButtonProps {
 }
 
 const LikeButton: FunctionComponent<LikeButtonProps> = ({ cardId }) => {
-  const { user } = useUserContext();
   const [showLike, setShowLike] = React.useState<boolean>(false);
   const handleLike = (cardId: string) => {
     likeCard(cardId);

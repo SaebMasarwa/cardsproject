@@ -5,7 +5,10 @@ import * as yup from "yup";
 import { getCurrentUserById, registerUser } from "../services/usersService";
 import { User } from "../interfaces/User";
 import { UserContext } from "../context/userContext";
-import { reactToastifyError } from "../misc/reactToastify";
+import {
+  reactToastifyError,
+  reactToastifySuccess,
+} from "../misc/reactToastify";
 
 interface RegisterProps {}
 
@@ -65,6 +68,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
         .then((res) => {
           localStorage.setItem("token", res.data);
           getCurrentUserById().then((res) => setUser(res?.data));
+          reactToastifySuccess("Registeration successful");
           navigate("/");
         })
         .catch((err) => {

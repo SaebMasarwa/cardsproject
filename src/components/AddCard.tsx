@@ -1,4 +1,4 @@
-import { FormikValues, useFormik } from "formik";
+import { useFormik } from "formik";
 import { FunctionComponent } from "react";
 import * as yup from "yup";
 import { createCard } from "../services/cardsService";
