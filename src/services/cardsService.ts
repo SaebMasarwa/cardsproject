@@ -109,7 +109,15 @@ export async function searchCards(query: string) {
   try {
     let res = await getAllCards();
     let cards = res.data;
-    let newCards = cards.filter((card: CardType) => card.title.includes(query));
+    let newCards = cards.filter(
+      (card: CardType) =>
+        card.title.includes(query) ||
+        card.description.includes(query) ||
+        card.phone.includes(query) ||
+        card.phone.includes(query) ||
+        card.email.includes(query) ||
+        card.address.country.includes(query)
+    );
     return newCards;
   } catch (error) {
     console.log(error);
@@ -118,8 +126,8 @@ export async function searchCards(query: string) {
 
 // Delete card
 export async function deleteCard(bizNumber: number, cardId: string) {
-  const token = localStorage.getItem("token");
   try {
+    const token = localStorage.getItem("token");
     return await axios.delete(`${api}/${cardId}`, {
       headers: {
         "x-auth-token": token,
