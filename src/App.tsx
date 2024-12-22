@@ -14,7 +14,7 @@ import { UserContext } from "./context/userContext";
 import { getCurrentUserById } from "./services/usersService";
 import MyCards from "./routes/MyCards";
 import { User } from "./interfaces/User";
-import AddCard from "./components/AddCard";
+import AddCard from "./routes/AddCard";
 import { ToastContainer } from "react-toastify";
 
 function App() {
