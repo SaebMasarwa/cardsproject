@@ -5,6 +5,10 @@ import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import { getCurrentUserById, loginUser } from "../services/usersService";
 import React from "react";
 import { UserContext } from "../context/userContext";
+import {
+  reactToastifyError,
+  reactToastifySuccess,
+} from "../misc/reactToastify";
 // import { useSelector, useDispatch } from "react-redux";
 // import { setUserAction, UsersAction } from "../redux/UsersState";
 // import { Dispatch } from "redux";
@@ -37,15 +41,16 @@ const Login: FunctionComponent<LoginProps> = () => {
         .then((res) => {
           if (res.data.length) {
             localStorage.setItem("token", res.data);
-            // setLoggedIn(true);
             getCurrentUserById().then((res) => {
               if (res) {
                 setUser(res.data);
-                setLoggedIn(true);
+                reactToastifySuccess("Login successful");
+                navigate("/");
               }
             });
           } else {
-            alert("No such user");
+            // alert("No such user");
+            reactToastifyError("No such user");
           }
         })
         .catch((err) => console.log(err));

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import type { CardType } from "../interfaces/Card";
-import { cardLikeStatus, deleteCard, likeCard } from "../services/cardsService";
+import { deleteCard } from "../services/cardsService";
 import { UserContext } from "../context/userContext";
 import { NavLink } from "react-router-dom";
 import LikeButton from "./LikeButton";
@@ -8,7 +8,7 @@ import LikeButton from "./LikeButton";
 
 export default function Card({ card }: { card: CardType }) {
   // const [showLike, setShowLike] = React.useState<boolean>(false);
-  const { user, loggedIn } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   // const handleLike = (cardId: string) => {
   //   likeCard(cardId);
   // };
@@ -44,7 +44,19 @@ export default function Card({ card }: { card: CardType }) {
             "
                 className="btn btn-outline-info me-3"
                 onClick={() => {
-                  handleDelete(card.bizNumber, card._id);
+                  handleDelete(card.bizNumber as number, card._id as string);
+                }}
+              >
+                <i className="bi bi-trash"></i>
+              </NavLink>
+            )}
+            {user && (
+              <NavLink
+                to="
+            "
+                className="btn btn-outline-info me-3"
+                onClick={() => {
+                  handleDelete(card.bizNumber as number, card._id as string);
                 }}
               >
                 <i className="bi bi-trash"></i>
@@ -56,7 +68,7 @@ export default function Card({ card }: { card: CardType }) {
             >
               <i className="bi bi-telephone-fill"></i>
             </NavLink>
-            {user && <LikeButton cardId={card._id} />}
+            {user && card._id && <LikeButton cardId={card._id} />}
           </div>
         </div>
       </div>

@@ -23,18 +23,6 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [darkMode, searchResults]);
 
-  const handleSearch = (searchQuery: string) => {
-    searchCards(searchQuery)
-      .then((res) => {
-        if (res) {
-          setSearchResults(res);
-        } else {
-          setSearchResults([]);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-
   return (
     <>
       <script
@@ -59,126 +47,112 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav  mb-2 mb-lg-0">
-              <li className="nav-item">
-                <NavLink className="nav-link" aria-current="page" to="/about">
-                  About
-                </NavLink>
-              </li>
-              {user !== null && (
-                <li className="nav-item">
-                  <NavLink
-                    className="nav-link"
-                    aria-current="page"
-                    to="/favcards"
-                  >
-                    Fav Cards
-                  </NavLink>
-                </li>
-              )}
-              {user?.isBusiness && (
-                <>
+            <div className="d-flex justify-content-between w-100">
+              <div>
+                <ul className="navbar-nav  mb-2 mb-lg-0">
                   <li className="nav-item">
                     <NavLink
                       className="nav-link"
                       aria-current="page"
-                      to="/mycards"
+                      to="/about"
                     >
-                      My Cards
+                      About
                     </NavLink>
                   </li>
-                </>
-              )}
+                  {user !== null && (
+                    <li className="nav-item">
+                      <NavLink
+                        className="nav-link"
+                        aria-current="page"
+                        to="/favcards"
+                      >
+                        Fav Cards
+                      </NavLink>
+                    </li>
+                  )}
+                  {user?.isBusiness && (
+                    <>
+                      <li className="nav-item">
+                        <NavLink
+                          className="nav-link"
+                          aria-current="page"
+                          to="/mycards"
+                        >
+                          My Cards
+                        </NavLink>
+                      </li>
+                    </>
+                  )}
 
-              {user?.isAdmin && (
-                <>
-                  <li className="nav-item">
-                    <NavLink
-                      className="nav-link"
-                      aria-current="page"
-                      to="/sandbox"
-                    >
-                      Sandbox
-                    </NavLink>
-                  </li>
-                </>
-              )}
-            </ul>
-          </div>
-          <div>
-            <ul className="d-flex navbar-nav  mb-2 mb-lg-0 align-items-center">
-              <input
-                className="form-control me-2"
-                type="text"
-                placeholder="Search"
-                aria-label="Search"
-                onChange={(e) => {
-                  handleSearch(e.target.value);
-                }}
-              />
-              <li className="nav-item">
+                  {user?.isAdmin && (
+                    <>
+                      <li className="nav-item">
+                        <NavLink
+                          className="nav-link"
+                          aria-current="page"
+                          to="/sandbox"
+                        >
+                          Sandbox
+                        </NavLink>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
+              <div className="d-flex mb-2 mb-lg-0 flex-sm-column flex-lg-row">
                 {localStorage.getItem("darkMode") === "true" ? (
                   <i
-                    className="bi bi-moon-fill nav-link"
+                    className="bi bi-moon-fill nav-link m-2"
                     onClick={() => toggleDarkMode(false)}
                     title="Dark Mode"
                   ></i>
                 ) : (
                   <i
-                    className="bi bi-moon nav-link"
+                    className="bi bi-moon nav-link m-2"
                     onClick={() => toggleDarkMode(true)}
                     title="Light Mode"
                   ></i>
                 )}
-              </li>
-              {user ? (
-                <>
-                  <li className="nav-item">
-                    <NavLink className="nav-link" to="/profile">
+                {user ? (
+                  <>
+                    <NavLink className="nav-link m-2" to="/profile">
                       <i className="bi bi-person-circle"></i>
                     </NavLink>
-                  </li>
-                  <li className="nav-item">
                     <NavLink
                       to={"/login"}
-                      className="nav-link"
+                      className="nav-link m-2"
                       type="submit"
                       onClick={() => {
                         localStorage.removeItem("token");
-                        // dispatch(setUserAction(null));
                         setUser(null);
-                        // navigate("/login");
                       }}
                     >
                       Logout
                     </NavLink>
-                  </li>
-                </>
-              ) : (
-                <>
-                  <li>
+                  </>
+                ) : (
+                  <>
                     <NavLink
-                      className="nav-link"
+                      className="nav-link m-2"
                       aria-current="page"
                       to="/register"
                     >
                       Register
                     </NavLink>
-                  </li>
-                  <li>
                     <NavLink
-                      className="nav-link"
+                      className="nav-link m-2"
                       aria-current="page"
                       to="/login"
                     >
                       Login
                     </NavLink>
-                  </li>
-                </>
-              )}
-            </ul>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
+        {/* </div> */}
       </nav>
     </>
   );

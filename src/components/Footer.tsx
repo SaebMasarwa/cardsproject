@@ -1,11 +1,15 @@
 import { NavLink } from "react-router-dom";
-// import { useSelector } from "react-redux";
 import { useContext } from "react";
 import { UserContext } from "../context/userContext";
+import { toast } from "react-toastify";
+import {
+  reactToastifyError,
+  reactToastifySuccess,
+} from "../misc/reactToastify";
 
 export default function Footer() {
   const { user } = useContext(UserContext);
-  // let user = useSelector((state: any) => state.usersState.user);
+
   return (
     <div className="mt-5">
       <figure className="figure">

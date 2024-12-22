@@ -21,7 +21,9 @@ export async function getFavCards() {
     console.log(resAllCards);
 
     const allCards = resAllCards.data;
-    const favCards = allCards.filter((card) => card.likes.includes(userId));
+    const favCards = allCards.filter(
+      (card) => card.likes && card.likes.includes(userId)
+    );
     console.log(favCards);
 
     return favCards;
@@ -89,13 +91,14 @@ export async function cardLikeStatus(cardId: string) {
 
 // Create card
 export async function createCard(card: CardType) {
-  const token = localStorage.getItem("token");
   try {
-    return await axios.post(api, card, {
+    const token = localStorage.getItem("token");
+    let res = await axios.post(api, card, {
       headers: {
         "x-auth-token": token,
       },
     });
+    return res;
   } catch (error) {
     console.log(error);
   }

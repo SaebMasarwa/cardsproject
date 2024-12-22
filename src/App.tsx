@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import PageNotFound from "./components/PageNotFound";
@@ -13,10 +13,9 @@ import { ThemeContext } from "./context/themeContext";
 import { UserContext } from "./context/userContext";
 import { getCurrentUserById } from "./services/usersService";
 import MyCards from "./routes/MyCards";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Dispatch } from "redux";
-// import { setUserAction, UsersAction } from "./redux/UsersState";
 import { User } from "./interfaces/User";
+import AddCard from "./components/AddCard";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
@@ -26,9 +25,6 @@ function App() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<any>(null);
   const htmlElement = document.querySelector("html");
-
-  // let user = useSelector((state: any) => state.usersState.user);
-  // const dispatch = useDispatch<Dispatch<UsersAction>>();
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -75,6 +71,7 @@ function App() {
         }}
       >
         <div className="App">
+          <ToastContainer />
           <Router>
             <Navbar />
             <Routes>
@@ -84,6 +81,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/about" element={<About />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/addcard" element={<AddCard />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
             <Footer />

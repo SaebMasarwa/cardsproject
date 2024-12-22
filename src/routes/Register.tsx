@@ -5,18 +5,13 @@ import * as yup from "yup";
 import { getCurrentUserById, registerUser } from "../services/usersService";
 import { User } from "../interfaces/User";
 import { UserContext } from "../context/userContext";
-// import { setUserAction, UsersAction } from "../redux/UsersState";
-// import { useDispatch, useSelector } from "react-redux";
-// import { Dispatch } from "redux";
-// import { setUser } from "../redux/UserSlice";
+import { reactToastifyError } from "../misc/reactToastify";
 
 interface RegisterProps {}
 
 const Register: FunctionComponent<RegisterProps> = () => {
   const navigate: NavigateFunction = useNavigate();
-  const { user, setUser } = useContext(UserContext);
-  // let user = useSelector((state: any) => state.usersState.user);
-  // const dispatch = useDispatch<Dispatch<UsersAction>>();
+  const { setUser } = useContext(UserContext);
   const formik = useFormik({
     initialValues: {
       name: {
@@ -70,20 +65,21 @@ const Register: FunctionComponent<RegisterProps> = () => {
         .then((res) => {
           localStorage.setItem("token", res.data);
           getCurrentUserById().then((res) => setUser(res?.data));
-          // setUser(res.data);
-          // dispatch(setUserAction(res.data));
           navigate("/");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          reactToastifyError("Registeration failed");
+        });
     },
   });
 
   const onchangeChecked = (checked: boolean) => {
     formik.setFieldValue("isBusiness", checked);
   };
+
   return (
     <div className="container w-25">
-      <h5 className="display-5 my-2">REGISTER</h5>
+      <h5 className="display-5 my-2">Register</h5>
       <form onSubmit={formik.handleSubmit}>
         <div className="form-floating mb-3">
           <input
@@ -328,6 +324,14 @@ const Register: FunctionComponent<RegisterProps> = () => {
           disabled={!formik.dirty || !formik.isValid}
         >
           Register
+        </button>
+        <button
+          type="reset"
+          className="btn btn-warning mt-3 w-25 mx-auto p-2"
+          disabled={!formik.dirty}
+          onClick={formik.handleReset}
+        >
+          Reset
         </button>
       </form>
       <p className="mt-3">
