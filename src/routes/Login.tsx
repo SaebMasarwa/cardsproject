@@ -38,7 +38,10 @@ const Login: FunctionComponent<LoginProps> = () => {
             reactToastifyError("No such user");
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          reactToastifyError("Login failed");
+          console.log(err);
+        });
     },
   });
 

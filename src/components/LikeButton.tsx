@@ -8,7 +8,7 @@ interface LikeButtonProps {
 }
 
 const LikeButton: FunctionComponent<LikeButtonProps> = ({ cardId }) => {
-  const [showLike, setShowLike] = React.useState<boolean>(false);
+  const [showLike, setShowLike] = React.useState<boolean>();
   const handleLike = (cardId: string) => {
     likeCard(cardId);
   };

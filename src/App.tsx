@@ -16,13 +16,14 @@ import MyCards from "./routes/MyCards";
 import { User } from "./interfaces/User";
 import AddCard from "./routes/AddCard";
 import { ToastContainer } from "react-toastify";
+import EditCard from "./routes/EditCard";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
     localStorage.getItem("darkMode") === "true" ? true : false
   );
   const [user, setUser] = useState<User | null>(null);
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
+  const [likeCountChanged, setLikeCountChanged] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<any>(null);
   const htmlElement = document.querySelector("html");
 
@@ -39,8 +40,6 @@ function App() {
       .then((res) => {
         if (res) {
           setUser(res.data);
-          setLoggedIn(true);
-          // dispatch(setUserAction(res.data));
         }
       })
       .catch((err) => console.log(err));
@@ -51,9 +50,8 @@ function App() {
       htmlElement?.setAttribute("data-bs-theme", "light");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [darkMode, searchResults]);
+  }, [darkMode, searchResults, likeCountChanged]);
   return (
-    // <Provider store={store}>
     <ThemeContext.Provider
       value={{
         darkMode,
@@ -64,8 +62,8 @@ function App() {
         value={{
           user,
           setUser,
-          loggedIn,
-          setLoggedIn,
+          likeCountChanged,
+          setLikeCountChanged,
           searchResults,
           setSearchResults,
         }}
@@ -82,6 +80,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/register" element={<Register />} />
               <Route path="/addcard" element={<AddCard />} />
+              <Route path="/editcard/:id" element={<EditCard />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
             <Footer />

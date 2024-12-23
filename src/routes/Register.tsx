@@ -82,10 +82,13 @@ const Register: FunctionComponent<RegisterProps> = () => {
   };
 
   return (
-    <div className="container w-25">
+    <div className="container w-50">
       <h5 className="display-5 my-2">Register</h5>
-      <form onSubmit={formik.handleSubmit}>
-        <div className="form-floating mb-3">
+      <form
+        className="d-flex flex-row flex-wrap justify-content-center"
+        onSubmit={formik.handleSubmit}
+      >
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -101,7 +104,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.name?.first}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -117,7 +120,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.name.middle}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -133,7 +136,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.name.last}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -149,7 +152,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.phone}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="email"
             className="form-control"
@@ -165,7 +168,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.email}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="password"
             className="form-control"
@@ -181,7 +184,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.password}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -197,7 +200,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.image.url}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -213,7 +216,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.image.alt}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -229,7 +232,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.address.state}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -246,7 +249,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
               <p className="text-danger">{formik.errors.address.country}</p>
             )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -262,7 +265,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.address.city}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="text"
             className="form-control"
@@ -278,7 +281,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.address.street}</p>
           )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="number"
             className="form-control"
@@ -295,7 +298,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
               <p className="text-danger">{formik.errors.address.houseNumber}</p>
             )}
         </div>
-        <div className="form-floating mb-3">
+        <div className="form-floating mb-3 col-5 me-2">
           <input
             type="number"
             className="form-control"
@@ -311,7 +314,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
             <p className="text-danger">{formik.errors.address.zip}</p>
           )}
         </div>
-        <div className="form-check w-75 m-auto mb-3 text-warning">
+        <div className="form-check w-75 mb-3 text-warning">
           <input
             className="form-check-input"
             type="checkbox"
@@ -323,7 +326,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
           </label>
         </div>
         <button
-          className="btn btn-primary mt-3 w-100"
+          className="btn btn-primary mt-3 col-5 me-2"
           type="submit"
           disabled={!formik.dirty || !formik.isValid}
         >
@@ -331,7 +334,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
         </button>
         <button
           type="reset"
-          className="btn btn-warning mt-3 w-25 mx-auto p-2"
+          className="btn btn-warning mt-3 p-2 col-5"
           disabled={!formik.dirty}
           onClick={formik.handleReset}
         >

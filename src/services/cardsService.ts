@@ -138,3 +138,17 @@ export async function deleteCard(bizNumber: number, cardId: string) {
     console.log(error);
   }
 }
+
+// Update card
+export async function updateCard(cardId: string, card: CardType) {
+  try {
+    const token = localStorage.getItem("token");
+    return await axios.put(`${api}/${cardId}`, card, {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}

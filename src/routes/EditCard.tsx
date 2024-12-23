@@ -1,37 +1,59 @@
 import { useFormik } from "formik";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
+import { NavigateFunction, useParams, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { createCard } from "../services/cardsService";
-import { CardType } from "../interfaces/Card";
+import { getCardById, updateCard } from "../services/cardsService";
 import {
   reactToastifyError,
   reactToastifySuccess,
 } from "../misc/reactToastify";
+import { CardType } from "../interfaces/Card";
 
-interface AddCardProps {}
+interface EditCardProps {}
 
-const AddCard: FunctionComponent<AddCardProps> = () => {
-  const formik = useFormik({
-    initialValues: {
-      title: "",
-      subtitle: "",
-      description: "",
-      phone: "",
-      email: "",
-      web: "",
-      image: {
-        url: "",
-        alt: "",
-      },
-      address: {
-        state: "",
-        country: "",
-        city: "",
-        street: "",
-        houseNumber: 0,
-        zip: 0,
-      },
+const EditCard: FunctionComponent<EditCardProps> = () => {
+  const navigate: NavigateFunction = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const [editedCard, setEditedCard] = useState<CardType>({
+    title: "",
+    subtitle: "",
+    description: "",
+    phone: "",
+    email: "",
+    web: "",
+    image: {
+      url: "",
+      alt: "",
     },
+    address: {
+      state: "",
+      country: "",
+      city: "",
+      street: "",
+      houseNumber: 0,
+      zip: 0,
+    },
+  });
+
+  useEffect(() => {
+    getCardById(id as string)
+      .then((res) => {
+        // setCard(res.data);
+        setEditedCard(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    formik.setValues(editedCard);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editedCard]);
+
+  const formik = useFormik({
+    initialValues: editedCard,
+    enableReinitialize: true,
     validationSchema: yup.object({
       title: yup.string().required(),
       subtitle: yup.string().required(),
@@ -53,20 +75,39 @@ const AddCard: FunctionComponent<AddCardProps> = () => {
       }),
     }),
     onSubmit: (values: CardType) => {
-      createCard(values)
+      updateCard(id as string, {
+        title: values.title,
+        subtitle: values.subtitle,
+        description: values.description,
+        phone: values.phone,
+        email: values.email,
+        web: values.web,
+        image: {
+          url: values.image.url,
+          alt: values.image.alt,
+        },
+        address: {
+          state: values.address.state,
+          country: values.address.country,
+          city: values.address.city,
+          street: values.address.street,
+          houseNumber: values.address.houseNumber,
+          zip: values.address.zip,
+        },
+      })
         .then((res) => {
-          reactToastifySuccess("Card created successfully");
-          formik.resetForm();
+          reactToastifySuccess("Card updated successfully");
+          navigate(-1);
         })
         .catch((err) => {
-          reactToastifyError("Card creation failed");
+          reactToastifyError("Card update failed");
         });
     },
   });
 
   return (
     <>
-      <div className="display-3">Create Card</div>
+      <div className="display-3">Edit Card</div>
       <div className="container-fluid w-75">
         <form
           className="d-flex flex-row flex-wrap justify-content-center"
@@ -330,17 +371,8 @@ const AddCard: FunctionComponent<AddCardProps> = () => {
           <button
             type="submit"
             className="btn btn-primary mt-3 col-3 mx-auto p-2"
-            disabled={!formik.dirty || !formik.isValid}
           >
-            Submit
-          </button>
-          <button
-            type="reset"
-            className="btn btn-warning mt-3 col-3 mx-auto p-2"
-            disabled={!formik.dirty}
-            onClick={formik.handleReset}
-          >
-            Reset
+            Update
           </button>
         </form>
       </div>
@@ -348,4 +380,4 @@ const AddCard: FunctionComponent<AddCardProps> = () => {
   );
 };
 
-export default AddCard;
+export default EditCard;
