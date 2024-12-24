@@ -32,10 +32,15 @@ const Home: FunctionComponent<HomeProps> = () => {
   };
 
   useEffect(() => {
-    getAllCards().then((res) => {
-      dispatch(setAllCardsAction(res.data));
-      setIsLoading(true);
-    });
+    getAllCards()
+      .then((res) => {
+        dispatch(setAllCardsAction(res.data));
+        setIsLoading(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        reactToastifyError("Failed to fetch cards");
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
