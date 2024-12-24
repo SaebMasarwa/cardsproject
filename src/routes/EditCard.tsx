@@ -38,9 +38,13 @@ const EditCard: FunctionComponent<EditCardProps> = () => {
   useEffect(() => {
     getCardById(id as string)
       .then((res) => {
-        // setCard(res.data);
-        setEditedCard(res.data);
-        console.log(res.data);
+        if (res === null) {
+          reactToastifyError("Card not found redirecting to previous page");
+          navigate(-1);
+        } else {
+          setEditedCard(res.data);
+          console.log(res.data);
+        }
       })
       .catch((err) => console.log(err));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -368,11 +372,17 @@ const EditCard: FunctionComponent<EditCardProps> = () => {
               <p className="text-danger">{formik.errors.address.zip}</p>
             )}
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary mt-3 col-3 mx-auto p-2"
-          >
+          <button type="submit" className="btn btn-primary mt-3 col-10">
             Update
+          </button>
+          <button
+            className="btn btn-warning mt-3 col-5 mx-auto me-2"
+            onClick={() => navigate(-1)}
+          >
+            Cancel
+          </button>
+          <button className="btn btn-danger mt-3 col-5 mx-auto" type="reset">
+            Reset
           </button>
         </form>
       </div>

@@ -34,7 +34,13 @@ export async function getFavCards() {
 
 // Get card by id
 export async function getCardById(id: string) {
-  return await axios.get<CardType>(`${api}/${id}`);
+  try {
+    let res = await axios.get<CardType>(`${api}/${id}`);
+    return res;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 }
 
 // Get my cards

@@ -10,9 +10,6 @@ import { User } from "../interfaces/User";
 interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
-  likeCountChanged: boolean;
-  setLikeCountChanged: (mode: boolean) => void;
-
   searchResults: any;
   setSearchResults: (results: any) => void;
 }
@@ -20,8 +17,6 @@ interface UserContextType {
 export const UserContext = createContext<UserContextType>({
   user: null,
   setUser: () => {},
-  likeCountChanged: false,
-  setLikeCountChanged: () => {},
   searchResults: null,
   setSearchResults: () => {},
 });
@@ -44,7 +39,6 @@ export const UserProvider: FunctionComponent<UserProviderProps> = ({
   children: React.ReactNode;
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [likeCountChanged, setLikeCountChanged] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<any>(null);
 
   return (
@@ -52,8 +46,6 @@ export const UserProvider: FunctionComponent<UserProviderProps> = ({
       value={{
         user,
         setUser,
-        likeCountChanged,
-        setLikeCountChanged,
         searchResults,
         setSearchResults,
       }}

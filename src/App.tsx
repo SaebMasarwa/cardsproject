@@ -17,13 +17,14 @@ import { User } from "./interfaces/User";
 import AddCard from "./routes/AddCard";
 import { ToastContainer } from "react-toastify";
 import EditCard from "./routes/EditCard";
+import DisplayCard from "./routes/DisplayCard";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
     localStorage.getItem("darkMode") === "true" ? true : false
   );
   const [user, setUser] = useState<User | null>(null);
-  const [likeCountChanged, setLikeCountChanged] = useState<boolean>(false);
   const [searchResults, setSearchResults] = useState<any>(null);
   const htmlElement = document.querySelector("html");
 
@@ -50,7 +51,7 @@ function App() {
       htmlElement?.setAttribute("data-bs-theme", "light");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [darkMode, searchResults, likeCountChanged]);
+  }, [darkMode, searchResults]);
   return (
     <ThemeContext.Provider
       value={{
@@ -62,29 +63,30 @@ function App() {
         value={{
           user,
           setUser,
-          likeCountChanged,
-          setLikeCountChanged,
           searchResults,
           setSearchResults,
         }}
       >
         <div className="App">
           <ToastContainer />
-          <Router>
-            <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/favcards" element={<FavCards />} />
-              <Route path="/mycards" element={<MyCards />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/addcard" element={<AddCard />} />
-              <Route path="/editcard/:id" element={<EditCard />} />
-              <Route path="*" element={<PageNotFound />} />
-            </Routes>
-            <Footer />
-          </Router>
+          <APIProvider apiKey={"AIzaSyDFdZjjVU4Vv0siXh7N97kj3T4c6t1gyIk"}>
+            <Router>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/favcards" element={<FavCards />} />
+                <Route path="/mycards" element={<MyCards />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/addcard" element={<AddCard />} />
+                <Route path="/editcard/:id" element={<EditCard />} />
+                <Route path="/displaycard/:id" element={<DisplayCard />} />
+                <Route path="*" element={<PageNotFound />} />
+              </Routes>
+              <Footer />
+            </Router>
+          </APIProvider>
         </div>
       </UserContext.Provider>
     </ThemeContext.Provider>

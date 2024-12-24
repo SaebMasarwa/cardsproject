@@ -9,10 +9,9 @@ import {
   reactToastifyError,
   reactToastifySuccess,
 } from "../misc/reactToastify";
-import { string } from "yup";
 
 export default function Card({ card }: { card: CardType }) {
-  const { user, likeCountChanged } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [deletePermitted, setDeletePermitted] = useState(false);
   const [editPermitted, setEditPermitted] = useState(false);
 
