@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import type { CardType } from "../interfaces/Card";
 import { deleteCard } from "../services/cardsService";
 import { UserContext } from "../context/userContext";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import LikeButton from "./LikeButton";
 import { User } from "../interfaces/User";
 import {
@@ -88,7 +88,7 @@ export default function Card({ card }: { card: CardType }) {
               </NavLink>
             )}
             {user?.isAdmin && (
-              <NavLink
+              <Link
                 to="
             "
                 className="btn btn-outline-danger me-3"
@@ -105,32 +105,38 @@ export default function Card({ card }: { card: CardType }) {
                 }}
               >
                 <i className="bi bi-trash"></i>
-              </NavLink>
+              </Link>
             )}
             {user?.isAdmin === false && user && editPermitted && (
-              <NavLink
+              <Link
                 to={`/editcard/${card._id}`}
                 className="btn btn-outline-warning me-3"
               >
                 <i className="bi bi-pencil"></i>
-              </NavLink>
+              </Link>
             )}
             {user?.isAdmin && (
-              <NavLink
+              <Link
                 to={`/editcard/${card._id}`}
                 className="btn btn-outline-warning me-3"
               >
                 <i className="bi bi-pencil"></i>
-              </NavLink>
+              </Link>
             )}
-            <NavLink
+            <Link
               to={`tel:${card.phone}`}
               className="btn btn-outline-info me-3"
             >
               <i className="bi bi-telephone-fill"></i>
-            </NavLink>
+            </Link>
             {user && card._id && <LikeButton cardId={card._id} />}
           </div>
+          <Link
+            to={("/displaycard/" + card._id) as string}
+            className="btn btn-primary mt-3"
+          >
+            Visit Card
+          </Link>
         </div>
       </div>
     </>

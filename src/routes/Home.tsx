@@ -1,4 +1,4 @@
-import { FunctionComponent, useContext, useEffect } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { getAllCards, searchCards } from "../services/cardsService";
 import { CardType } from "../interfaces/Card";
 import Card from "../components/Card";
@@ -8,6 +8,7 @@ import { CardsAction, setAllCardsAction } from "../redux/CardsState";
 import { Dispatch } from "redux";
 import { NavLink } from "react-router-dom";
 import { reactToastifyError } from "../misc/reactToastify";
+import { Pagination } from "react-bootstrap";
 
 interface HomeProps {}
 
@@ -16,10 +17,37 @@ const Home: FunctionComponent<HomeProps> = () => {
   let cards = useSelector((state: any) => state.cardsState.cards);
   const dispatch = useDispatch<Dispatch<CardsAction>>();
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const [cardPaginationStart, setcardPaginationStart] = useState(0);
+  const [cardPaginationEnd, setcardPaginationEnd] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onPageChange = (page: number) => {
+    setCurrentPage(page);
+    const start = (page - 1) * 10;
+    const end = start + 10;
+    setcardPaginationStart(start);
+    setcardPaginationEnd(end);
+  };
+
   useEffect(() => {
-    getAllCards().then((res) => dispatch(setAllCardsAction(res.data)));
+    getAllCards().then((res) => {
+      dispatch(setAllCardsAction(res.data));
+      setIsLoading(true);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const cardsToDisplay = cards
+    .slice(cardPaginationStart, cardPaginationEnd)
+    .map((card: CardType) => {
+      return (
+        <div className="mx-auto d-flex flex-wrap">
+          <Card card={card} key={card._id} />
+        </div>
+      );
+    });
 
   const handleSearch = (searchQuery: string) => {
     searchCards(searchQuery)
@@ -36,6 +64,7 @@ const Home: FunctionComponent<HomeProps> = () => {
 
   return (
     <>
+      {/* Search input */}
       <input
         className="form-control w-50 mx-auto my-3"
         type="text"
@@ -45,6 +74,7 @@ const Home: FunctionComponent<HomeProps> = () => {
           handleSearch(e.target.value);
         }}
       />
+      {/* Search results display */}
       {searchResults?.length && (
         <>
           <div className="display-3">Search Results Page</div>
@@ -69,17 +99,39 @@ const Home: FunctionComponent<HomeProps> = () => {
               Add Card
             </NavLink>
           )}
-          <div className="container-fluid">
-            <div className="d-flex flex-wrap">
-              {cards.map((card: CardType) => {
+          <Pagination className="d-flex justify-content-center my-3">
+            {Array.from({ length: Math.ceil(cards.length / 10) }).map(
+              (el, index) => {
                 return (
-                  <div className="mx-auto d-flex flex-wrap">
-                    <Card card={card} key={card._id} />
-                  </div>
+                  <Pagination.Item
+                    key={index}
+                    active={index + 1 === currentPage}
+                    onClick={() => onPageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </Pagination.Item>
                 );
-              })}
-            </div>
+              }
+            )}
+          </Pagination>
+          <div className="container-fluid">
+            <div className="d-flex flex-wrap">{cardsToDisplay}</div>
           </div>
+          <Pagination className="d-flex justify-content-center mt-3">
+            {Array.from({ length: Math.ceil(cards.length / 10) }).map(
+              (el, index) => {
+                return (
+                  <Pagination.Item
+                    key={index}
+                    active={index + 1 === currentPage}
+                    onClick={() => onPageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </Pagination.Item>
+                );
+              }
+            )}
+          </Pagination>
         </>
       )}
     </>
