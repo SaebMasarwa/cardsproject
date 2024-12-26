@@ -72,35 +72,30 @@ const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
         {displayedCard != null && (
           <div className="card m-3">
             <div className="card-header">
-              <h5 className="card-title">{displayedCard?.title}</h5>
+              <h5 className="card-title">{displayedCard.title}</h5>
             </div>
             <div className="card-body d-flex">
               <img
-                src={displayedCard?.image.url}
+                src={displayedCard.image.url}
                 className="card-img-top w-50"
-                alt={displayedCard?.image.alt}
+                alt={displayedCard.image.alt}
               />
               <div className="p-3">
-                <h3 className="card-title">{displayedCard?.title}</h3>
-                <h5 className="card-subtitle mb-2">
-                  {displayedCard?.subtitle}
-                </h5>
-                <p className="card-text"> {displayedCard?.description}</p>
-                <i className="bi bi-telephone"></i> {displayedCard?.phone}
-                <i className="bi bi-envelope-at ms-2">
-                  {" "}
-                  {displayedCard?.email}
-                </i>
+                <h3 className="card-title">{displayedCard.title}</h3>
+                <h5 className="card-subtitle mb-2">{displayedCard.subtitle}</h5>
+                <p className="card-text"> {displayedCard.description}</p>
+                <i className="bi bi-telephone"></i> {displayedCard.phone}
+                <i className="bi bi-envelope-at ms-2"> {displayedCard.email}</i>
                 <i className="bi bi-link-45deg  ms-2"></i>
-                <Link to={displayedCard?.web} className="text-decoration-none">
+                <Link to={displayedCard.web} className="text-decoration-none">
                   Website
                 </Link>
                 <p className="card-text">
-                  Address: {displayedCard?.address.city}
+                  Address: {displayedCard.address.city}
                   {", "}
-                  {displayedCard?.address.state}
+                  {displayedCard.address.state}
                   {", "}
-                  {displayedCard?.address.country}
+                  {displayedCard.address.country}
                 </p>
               </div>
             </div>
