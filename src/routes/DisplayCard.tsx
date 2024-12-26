@@ -21,7 +21,7 @@ const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
   const [displayedCard, setDisplayedCard] = useState<CardType | null>();
   const [location, setLocation] = useState<number[]>();
 
-  const fetchData = async () => {
+  const fetchCard = async () => {
     await getCardById(id as string)
       .then((res) => {
         if (res) {
@@ -45,13 +45,9 @@ const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
       });
   };
 
-  useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
+  const fetchLocation = async () => {
     if (displayedCard) {
-      getGeolocationByCity(displayedCard.address.city as string)
+      await getGeolocationByCity(displayedCard.address.city as string)
         .then((res) => {
           setLocation([res[0].lat, res[0].lon]);
         })
@@ -59,6 +55,14 @@ const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
           reactToastifyError("Address not found");
         });
     }
+  };
+
+  useEffect(() => {
+    fetchCard();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    fetchLocation();
   }, [displayedCard]);
 
   return (
