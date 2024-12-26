@@ -49,7 +49,7 @@ const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
     if (displayedCard) {
       console.log(displayedCard.address.city);
 
-      await getGeolocationByCity(displayedCard.address.city)
+      getGeolocationByCity(displayedCard.address.city)
         .then((res) => {
           console.log(res);
           console.log(res[0].lat, res[0].lon);
