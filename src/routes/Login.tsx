@@ -40,7 +40,6 @@ const Login: FunctionComponent<LoginProps> = () => {
         })
         .catch((err) => {
           reactToastifyError("Login failed");
-          console.log(err);
         });
     },
   });
@@ -54,7 +53,7 @@ const Login: FunctionComponent<LoginProps> = () => {
 
   return (
     <div className="container-md w-50">
-      <h5 className="display-5 my-2">LOGIN</h5>
+      <h5 className="display-5 my-2">Login</h5>
       <form onSubmit={formik.handleSubmit}>
         <div className="form-floating mb-3">
           <input

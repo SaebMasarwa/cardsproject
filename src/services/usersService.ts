@@ -33,3 +33,55 @@ export async function getCurrentUserById() {
     return null;
   }
 }
+
+// Get all users
+export async function getAllUsers() {
+  try {
+    const token = localStorage.getItem("token");
+    const users = await axios.get(`${api}`, {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
+    return users;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// Delete user
+export async function deleteUser(userId: string) {
+  try {
+    const token = localStorage.getItem("token");
+    const user = await axios.delete(`${api}/${userId}`, {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
+    return user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// Update biusiness status
+export async function updateUserBusinessStatus(userId: string) {
+  try {
+    const token = localStorage.getItem("token");
+    const user = await axios.patch(
+      `${api}/${userId}`,
+      {},
+      {
+        headers: {
+          "x-auth-token": token,
+        },
+      }
+    );
+    return user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

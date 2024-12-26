@@ -2,7 +2,11 @@ import { FunctionComponent, useContext } from "react";
 import { useFormik } from "formik";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
 import * as yup from "yup";
-import { getCurrentUserById, registerUser } from "../services/usersService";
+import {
+  getCurrentUserById,
+  loginUser,
+  registerUser,
+} from "../services/usersService";
 import { User } from "../interfaces/User";
 import { UserContext } from "../context/userContext";
 import {
@@ -72,11 +76,28 @@ const Register: FunctionComponent<RegisterProps> = () => {
     }),
     onSubmit: (values: User) => {
       registerUser(values)
-        .then((res) => {
-          localStorage.setItem("token", res.data);
-          getCurrentUserById().then((res) => setUser(res?.data));
-          reactToastifySuccess("Registeration successful");
-          navigate("/");
+        .then((res) => {})
+        .then(() => {
+          loginUser(values.email, values.password)
+            .then((res) => {
+              if (res.data.length) {
+                localStorage.setItem("token", res.data);
+                getCurrentUserById().then((res) => {
+                  if (res) {
+                    setUser(res.data);
+                    reactToastifySuccess(
+                      "Registeration successful & Login successful, redirecting to home page"
+                    );
+                    navigate("/");
+                  }
+                });
+              } else {
+                reactToastifyError("No such user");
+              }
+            })
+            .catch((err) => {
+              reactToastifyError("Login failed");
+            });
         })
         .catch((err) => {
           reactToastifyError("Registeration failed");

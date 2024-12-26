@@ -105,37 +105,61 @@ const Home: FunctionComponent<HomeProps> = () => {
             </NavLink>
           )}
           <Pagination className="d-flex justify-content-center my-3">
+            <Pagination.First onClick={() => onPageChange(1)} />
+            <Pagination.Prev
+              onClick={() =>
+                onPageChange(currentPage - 1 > 0 ? currentPage - 1 : 1)
+              }
+            />
             {Array.from({ length: Math.ceil(cards.length / 10) }).map(
               (el, index) => {
                 return (
-                  <Pagination.Item
-                    key={index}
-                    active={index + 1 === currentPage}
-                    onClick={() => onPageChange(index + 1)}
-                  >
-                    {index + 1}
-                  </Pagination.Item>
+                  <>
+                    <Pagination.Item
+                      key={index}
+                      active={index + 1 === currentPage}
+                      onClick={() => onPageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </Pagination.Item>
+                  </>
                 );
               }
             )}
+            <Pagination.Next onClick={() => onPageChange(currentPage + 1)} />
+            <Pagination.Last
+              onClick={() => onPageChange(Math.ceil(cards.length / 10))}
+            />
           </Pagination>
           <div className="container-fluid">
             <div className="d-flex flex-wrap">{cardsToDisplay}</div>
           </div>
-          <Pagination className="d-flex justify-content-center mt-3">
+          <Pagination className="d-flex justify-content-center my-3">
+            <Pagination.First onClick={() => onPageChange(1)} />
+            <Pagination.Prev
+              onClick={() =>
+                onPageChange(currentPage - 1 > 0 ? currentPage - 1 : 1)
+              }
+            />
             {Array.from({ length: Math.ceil(cards.length / 10) }).map(
               (el, index) => {
                 return (
-                  <Pagination.Item
-                    key={index}
-                    active={index + 1 === currentPage}
-                    onClick={() => onPageChange(index + 1)}
-                  >
-                    {index + 1}
-                  </Pagination.Item>
+                  <>
+                    <Pagination.Item
+                      key={index}
+                      active={index + 1 === currentPage}
+                      onClick={() => onPageChange(index + 1)}
+                    >
+                      {index + 1}
+                    </Pagination.Item>
+                  </>
                 );
               }
             )}
+            <Pagination.Next onClick={() => onPageChange(currentPage + 1)} />
+            <Pagination.Last
+              onClick={() => onPageChange(Math.ceil(cards.length / 10))}
+            />
           </Pagination>
         </>
       )}

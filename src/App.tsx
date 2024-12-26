@@ -19,6 +19,8 @@ import { ToastContainer } from "react-toastify";
 import EditCard from "./routes/EditCard";
 import DisplayCard from "./routes/DisplayCard";
 import { APIProvider } from "@vis.gl/react-google-maps";
+import Sandbox from "./routes/Sandbox";
+import Profile from "./routes/Profile";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
@@ -27,6 +29,8 @@ function App() {
   const [user, setUser] = useState<User | null>(null);
   const [searchResults, setSearchResults] = useState<any>(null);
   const htmlElement = document.querySelector("html");
+
+  const api: string = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -69,7 +73,7 @@ function App() {
       >
         <div className="App">
           <ToastContainer />
-          <APIProvider apiKey={"AIzaSyDFdZjjVU4Vv0siXh7N97kj3T4c6t1gyIk"}>
+          <APIProvider apiKey={api}>
             <Router>
               <Navbar />
               <Routes>
@@ -79,9 +83,11 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/profile" element={<Profile />} />
                 <Route path="/addcard" element={<AddCard />} />
                 <Route path="/editcard/:id" element={<EditCard />} />
                 <Route path="/displaycard/:id" element={<DisplayCard />} />
+                <Route path="/sandbox" element={<Sandbox />} />
                 <Route path="*" element={<PageNotFound />} />
               </Routes>
               <Footer />

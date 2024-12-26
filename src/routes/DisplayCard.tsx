@@ -20,7 +20,6 @@ const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
   const { id } = useParams<{ id: string }>();
   const [DisplayedCard, setDisplayedCard] = useState<CardType | null>();
   const [location, setLocation] = useState<number[]>();
-  const { user } = useContext(UserContext);
 
   const fetchData = async () => {
     try {
