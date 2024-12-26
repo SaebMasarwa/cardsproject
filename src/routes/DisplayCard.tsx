@@ -47,6 +47,8 @@ const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
 
   const fetchLocation = async () => {
     if (displayedCard) {
+      console.log(displayedCard.address.city);
+
       await getGeolocationByCity(displayedCard.address.city)
         .then((res) => {
           console.log(res);
