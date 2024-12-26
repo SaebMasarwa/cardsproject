@@ -29,8 +29,7 @@ function App() {
   const [user, setUser] = useState<User | null>(null);
   const [searchResults, setSearchResults] = useState<any>(null);
   const htmlElement = document.querySelector("html");
-
-  const api: string = process.env.REACT_APP_GOOGLE_MAPS_API_KEY as string;
+  const api: string = process.env.REACT_APP_GOOGLE_API_KEY as string;
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);

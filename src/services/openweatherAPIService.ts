@@ -7,7 +7,6 @@ export async function getGeolocationByCity(city: string) {
     const res = await axios.get(
       `${api}q=${city}&appid=${process.env.REACT_APP_OPENWEATHER_API_KEY}`
     );
-    console.log("Geolocation by city: " + res.data);
 
     return res.data;
   } catch (error) {

@@ -18,84 +18,91 @@ interface DisplayCardProps {}
 const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
   const navigate: NavigateFunction = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [DisplayedCard, setDisplayedCard] = useState<CardType | null>();
+  const [displayedCard, setDisplayedCard] = useState<CardType | null>();
   const [location, setLocation] = useState<number[]>();
 
   const fetchData = async () => {
-    try {
-      getCardById(id as string)
-        .then((res) => {
-          setDisplayedCard(res?.data);
-          getGeolocationByCity(res?.data.address.city as string)
-            .then((res) => {
-              setLocation([res[0].lat, res[0].lon]);
-            })
-            .catch((error) => {
-              reactToastifyError("Address not found");
-            });
-        })
-        .catch((error) => {
+    await getCardById(id as string)
+      .then((res) => {
+        if (res) {
+          setDisplayedCard(res.data);
+        } else {
           reactToastifyError(
-            "Card not found, redirecting to previous page in 2 seconds"
+            "Error loading card, redirecting to previous page in 2 seconds"
           );
-        });
-    } catch (error) {
-      reactToastifyError(
-        "Card not found, redirecting to previous page in 2 seconds"
-      );
-      setTimeout(() => {
-        navigate(-1);
-      }, 2000);
-    }
+          setTimeout(() => {
+            navigate(-1);
+          }, 2000);
+        }
+      })
+      .catch((error) => {
+        reactToastifyError(
+          "Card not found, redirecting to previous page in 2 seconds"
+        );
+        setTimeout(() => {
+          navigate(-1);
+        }, 2000);
+      });
   };
 
   useEffect(() => {
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => {
+    if (displayedCard) {
+      getGeolocationByCity(displayedCard.address.city as string)
+        .then((res) => {
+          setLocation([res[0].lat, res[0].lon]);
+        })
+        .catch((error) => {
+          reactToastifyError("Address not found");
+        });
+    }
+  }, [displayedCard]);
 
   return (
     <>
       <div className="display-3">Display Card</div>
       <div className="container-fluid displaycard">
-        {DisplayedCard != null && (
+        {displayedCard != null && (
           <div className="card m-3">
             <div className="card-header">
-              <h5 className="card-title">{DisplayedCard?.title}</h5>
+              <h5 className="card-title">{displayedCard?.title}</h5>
             </div>
             <div className="card-body d-flex">
               <img
-                src={DisplayedCard?.image.url}
+                src={displayedCard?.image.url}
                 className="card-img-top w-50"
-                alt={DisplayedCard?.image.alt}
+                alt={displayedCard?.image.alt}
               />
               <div className="p-3">
-                <h3 className="card-title">{DisplayedCard?.title}</h3>
+                <h3 className="card-title">{displayedCard?.title}</h3>
                 <h5 className="card-subtitle mb-2">
-                  {DisplayedCard?.subtitle}
+                  {displayedCard?.subtitle}
                 </h5>
-                <p className="card-text"> {DisplayedCard?.description}</p>
-                <i className="bi bi-telephone"></i> {DisplayedCard?.phone}
+                <p className="card-text"> {displayedCard?.description}</p>
+                <i className="bi bi-telephone"></i> {displayedCard?.phone}
                 <i className="bi bi-envelope-at ms-2">
                   {" "}
-                  {DisplayedCard?.email}
+                  {displayedCard?.email}
                 </i>
                 <i className="bi bi-link-45deg  ms-2"></i>
-                <Link to={DisplayedCard?.web} className="text-decoration-none">
+                <Link to={displayedCard?.web} className="text-decoration-none">
                   Website
                 </Link>
                 <p className="card-text">
-                  {DisplayedCard?.address.city}
+                  Address: {displayedCard?.address.city}
                   {", "}
-                  {DisplayedCard?.address.state}
+                  {displayedCard?.address.state}
                   {", "}
-                  {DisplayedCard?.address.country}
+                  {displayedCard?.address.country}
                 </p>
               </div>
             </div>
 
             <div className="card-footer">
-              {DisplayedCard && location && (
+              {displayedCard && location && (
                 <MapContainerDisplay location={location} />
               )}
             </div>
