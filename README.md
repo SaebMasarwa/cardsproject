@@ -4,7 +4,7 @@ Welcome to my first ever full frontend react app.
 This app was made as a project during Full Stack Development Course.
 It uses an api provided by our college.
 
-##More about the app
+## More about the app
 
 ### Features
 
