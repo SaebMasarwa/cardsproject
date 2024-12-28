@@ -1,4 +1,4 @@
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import {
   NavigateFunction,
   useParams,
@@ -10,8 +10,6 @@ import { CardType } from "../interfaces/Card";
 import { reactToastifyError } from "../misc/reactToastify";
 import { getGeolocationByCity } from "../services/openweatherAPIService";
 import MapContainerDisplay from "../components/MapContainer";
-import LikeButton from "../components/LikeButton";
-import { UserContext } from "../context/userContext";
 
 interface DisplayCardProps {}
 
@@ -68,6 +66,7 @@ const DisplayCard: FunctionComponent<DisplayCardProps> = () => {
   }, []);
   useEffect(() => {
     fetchLocation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displayedCard]);
 
   return (

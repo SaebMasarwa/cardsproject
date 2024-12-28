@@ -16,7 +16,6 @@ function FavCards() {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardPaginationStart, setcardPaginationStart] = useState(0);
   const [cardPaginationEnd, setcardPaginationEnd] = useState(10);
-  const [isLoading, setIsLoading] = useState(false);
 
   const onPageChange = (page: number) => {
     setCurrentPage(page);

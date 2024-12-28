@@ -51,7 +51,7 @@ export default function Footer() {
           </figure>
         )}
       </div>
-      <div>version: 1.0.10</div>
+      <div>version: 1.1.0</div>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { User } from "../interfaces/User";
+import { User, UserEditType } from "../interfaces/User";
 import { jwtDecode } from "jwt-decode";
 import { ExtendedjwrPayload } from "../interfaces/User";
 
@@ -80,6 +80,24 @@ export async function updateUserBusinessStatus(userId: string) {
       }
     );
     return user;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}
+
+// Update user
+export async function updateUser(userId: string, user: UserEditType) {
+  try {
+    const token = localStorage.getItem("token");
+    const updatedUser = await axios.put(`${api}/${userId}`, user, {
+      headers: {
+        "x-auth-token": token,
+      },
+    });
+    console.log(updatedUser);
+
+    return updatedUser;
   } catch (error) {
     console.log(error);
     return null;

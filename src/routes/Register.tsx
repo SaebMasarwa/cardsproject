@@ -1,378 +1,87 @@
+import { Field, Form, Formik } from "formik";
 import { FunctionComponent, useContext } from "react";
-import { useFormik } from "formik";
+import {
+  initialValuesObj,
+  onSubmitObj,
+  validationSchemaObj,
+} from "../misc/registerFunction";
 import { Link, NavigateFunction, useNavigate } from "react-router-dom";
-import * as yup from "yup";
-import {
-  getCurrentUserById,
-  loginUser,
-  registerUser,
-} from "../services/usersService";
-import { User } from "../interfaces/User";
 import { UserContext } from "../context/userContext";
-import {
-  reactToastifyError,
-  reactToastifySuccess,
-} from "../misc/reactToastify";
+import InputField from "../components/InputField";
 
 interface RegisterProps {}
 
 const Register: FunctionComponent<RegisterProps> = () => {
   const navigate: NavigateFunction = useNavigate();
   const { setUser } = useContext(UserContext);
-  const formik = useFormik({
-    initialValues: {
-      name: {
-        first: "",
-        middle: "",
-        last: "",
-      },
-      email: "",
-      password: "",
-      phone: "",
-      image: {
-        url: "",
-        alt: "",
-      },
-      address: {
-        state: "",
-        country: "",
-        city: "",
-        street: "",
-        houseNumber: 0,
-        zip: 0,
-      },
-      isBusiness: false,
-      isAdmin: false,
-    },
-    validationSchema: yup.object({
-      name: yup.object({
-        first: yup.string().required().min(2),
-        middle: yup.string().min(2),
-        last: yup.string().required().min(2),
-      }),
-      phone: yup.string().required().min(10),
-      email: yup.string().required().email(),
-      password: yup
-        .string()
-        .required("Please enter your password")
-        .matches(
-          /^(?=.*[A-Z])(?=.*[a-z])(?=.*[*_0&^%$#@!])(?=.*.{4,}).{8,}$/,
-          "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 number, 1 special character and must be at least 8 characters long"
-        )
-        .min(8),
-      image: yup.object({
-        url: yup.string().required().url(),
-        alt: yup.string().required().min(2),
-      }),
-      address: yup.object({
-        state: yup.string().required().min(2),
-        country: yup.string().required().min(2),
-        city: yup.string().required().min(2),
-        street: yup.string().required().min(2),
-        houseNumber: yup.number().required().min(1),
-        zip: yup.number().required().min(1),
-      }),
-      isBusiness: yup.boolean(),
-    }),
-    onSubmit: (values: User) => {
-      registerUser(values)
-        .then((res) => {})
-        .then(() => {
-          loginUser(values.email, values.password)
-            .then((res) => {
-              if (res.data.length) {
-                localStorage.setItem("token", res.data);
-                getCurrentUserById().then((res) => {
-                  if (res) {
-                    setUser(res.data);
-                    reactToastifySuccess(
-                      "Registeration successful & Login successful, redirecting to home page"
-                    );
-                    navigate("/");
-                  }
-                });
-              } else {
-                reactToastifyError("No such user");
-              }
-            })
-            .catch((err) => {
-              reactToastifyError("Login failed");
-            });
-        })
-        .catch((err) => {
-          reactToastifyError("Registeration failed");
-        });
-    },
-  });
-
-  const onchangeChecked = (checked: boolean) => {
-    formik.setFieldValue("isBusiness", checked);
-  };
-
   return (
-    <div className="container w-50">
-      <h5 className="display-5 my-2">Register</h5>
-      <form
-        className="d-flex flex-row flex-wrap justify-content-center"
-        onSubmit={formik.handleSubmit}
+    <>
+      <Formik
+        initialValues={initialValuesObj}
+        validationSchema={validationSchemaObj}
+        onSubmit={(values, actions) => {
+          actions.setSubmitting(false);
+          onSubmitObj(values, setUser, navigate);
+        }}
       >
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="first"
-            placeholder="John"
-            name="name.first"
-            value={formik.values.name.first}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="first">First Name</label>
-          {formik.touched.name?.first && formik.errors.name?.first && (
-            <p className="text-danger">{formik.errors.name?.first}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="middle"
-            placeholder="Middle"
-            name="name.middle"
-            value={formik.values.name.middle}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="middle">Middle Name</label>
-          {formik.touched.name?.middle && formik.errors.name?.middle && (
-            <p className="text-danger">{formik.errors.name.middle}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="lastName"
-            placeholder="Doe"
-            name="name.last"
-            value={formik.values.name.last}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="lastName">Last Name</label>
-          {formik.touched.name?.last && formik.errors.name?.last && (
-            <p className="text-danger">{formik.errors.name.last}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="phone"
-            placeholder="050-1234567"
-            name="phone"
-            value={formik.values.phone}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="phone">Phone</label>
-          {formik.touched.phone && formik.errors.phone && (
-            <p className="text-danger">{formik.errors.phone}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="email"
-            className="form-control"
-            id="floatingInput"
-            placeholder="name@example.com"
-            name="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingInput">Email address</label>
-          {formik.touched.email && formik.errors.email && (
-            <p className="text-danger">{formik.errors.email}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="password"
-            className="form-control"
-            id="floatingPassword"
-            placeholder="Password"
-            name="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingPassword">Password</label>
-          {formik.touched.password && formik.errors.password && (
-            <p className="text-danger">{formik.errors.password}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="floatingImageURL"
-            placeholder="Image URL"
-            name="image.url"
-            value={formik.values.image.url}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingImageURL">Image URL</label>
-          {formik.touched.image?.url && formik.errors.image?.url && (
-            <p className="text-danger">{formik.errors.image.url}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="floatingImageAlt"
-            placeholder="Image Alt"
-            name="image.alt"
-            value={formik.values.image.alt}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingImageAlt">Image Alt</label>
-          {formik.touched.image?.alt && formik.errors.image?.alt && (
-            <p className="text-danger">{formik.errors.image.alt}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="floatingAddressState"
-            placeholder="State"
-            name="address.state"
-            value={formik.values.address.state}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingAddressState">State</label>
-          {formik.touched.address?.state && formik.errors.address?.state && (
-            <p className="text-danger">{formik.errors.address.state}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="floatingAddressCountry"
-            placeholder="Country"
-            name="address.country"
-            value={formik.values.address.country}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingAddressCountry">Country</label>
-          {formik.touched.address?.country &&
-            formik.errors.address?.country && (
-              <p className="text-danger">{formik.errors.address.country}</p>
-            )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="floatingAddressCity"
-            placeholder="City"
-            name="address.city"
-            value={formik.values.address.city}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingAddressCity">City</label>
-          {formik.touched.address?.city && formik.errors.address?.city && (
-            <p className="text-danger">{formik.errors.address.city}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="text"
-            className="form-control"
-            id="floatingAddressStreet"
-            placeholder="Street"
-            name="address.street"
-            value={formik.values.address.street}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingAddressStreet">Street</label>
-          {formik.touched.address?.street && formik.errors.address?.street && (
-            <p className="text-danger">{formik.errors.address.street}</p>
-          )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="number"
-            className="form-control"
-            id="floatingAddressHouseNumber"
-            placeholder="House Number"
-            name="address.houseNumber"
-            value={formik.values.address.houseNumber}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingAddressHouseNumber">House Number</label>
-          {formik.touched.address?.houseNumber &&
-            formik.errors.address?.houseNumber && (
-              <p className="text-danger">{formik.errors.address.houseNumber}</p>
-            )}
-        </div>
-        <div className="form-floating mb-3 col-5 me-2">
-          <input
-            type="number"
-            className="form-control"
-            id="floatingAddressZip"
-            placeholder="Zip"
-            name="address.zip"
-            value={formik.values.address.zip}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <label htmlFor="floatingAddressZip">Zip</label>
-          {formik.touched.address?.zip && formik.errors.address?.zip && (
-            <p className="text-danger">{formik.errors.address.zip}</p>
-          )}
-        </div>
-        <div className="form-check w-75 mb-3 text-warning">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            onChange={(e) => onchangeChecked(e.target.checked)}
-            id="flexCheckDefault"
-          />
-          <label className="form-check-label" htmlFor="flexCheckDefault">
-            Signup as business
-          </label>
-        </div>
-        <button
-          className="btn btn-primary mt-3 col-5 me-2"
-          type="submit"
-          disabled={!formik.dirty || !formik.isValid}
-        >
-          Register
-        </button>
-        <button
-          type="reset"
-          className="btn btn-warning mt-3 p-2 col-5"
-          disabled={!formik.dirty}
-          onClick={formik.handleReset}
-        >
-          Reset
-        </button>
-      </form>
-      <p className="mt-3">
-        <Link to="/">Already have an account? Log in</Link>
-      </p>
-    </div>
+        {({ setFieldValue, handleReset, isValid, dirty }) => (
+          <div className="container w-50">
+            <Form className="d-flex flex-row flex-wrap justify-content-center">
+              <InputField label="First Name" name="name.first" />
+              <InputField label="Middle Name" name="name.middle" />
+              <InputField label="Last Name" name="name.last" />
+              <InputField label="Phone" name="phone" />
+              <InputField label="Email Address" type="email" name="email" />
+              <InputField label="Password" type="password" name="password" />
+              <InputField label="Image URL" name="image.url" />
+              <InputField label="Image alt" name="image.alt" />
+              <InputField label="State" name="address.state" />
+              <InputField label="Country" name="address.country" />
+              <InputField label="City" name="address.city" />
+              <InputField label="Street" name="address.street" />
+              <InputField label="Houst Number" name="address.houseNumber" />
+              <InputField label="Zip Code" name="address.zip" />
+              <div className="d-flex flex-row justify-content-center w-100">
+                <Field
+                  className="form-check"
+                  type="checkbox"
+                  name="isBusiness"
+                  id="isBusiness"
+                  onChange={(e: { target: { checked: boolean } }) => {
+                    setFieldValue("isBusiness", e.target.checked);
+                  }}
+                />
+                <label className="form-check" htmlFor="isBusiness">
+                  Sign up as a business?
+                </label>
+              </div>
+              <div className="d-flex flex-row justify-content-center w-100">
+                <button
+                  className="btn btn-primary mt-3 col-5 me-2"
+                  type="submit"
+                  disabled={!isValid || !dirty}
+                >
+                  Submit
+                </button>
+                <button
+                  type="reset"
+                  className="btn btn-warning mt-3 p-2 col-5"
+                  disabled={!isValid || !dirty}
+                  onClick={() => {
+                    handleReset();
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+            </Form>
+            <p className="mt-4">
+              <Link to="/">Already have an account? Log in</Link>
+            </p>
+          </div>
+        )}
+      </Formik>
+    </>
   );
 };
 

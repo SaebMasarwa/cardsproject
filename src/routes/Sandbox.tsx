@@ -26,6 +26,7 @@ const Sandbox: FunctionComponent<SandboxProps> = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [userPaginationStart, setUserPaginationStart] = useState(0);
   const [userPaginationEnd, setUserPaginationEnd] = useState(100);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
 
   const onPageChange = (page: number) => {
@@ -40,7 +41,6 @@ const Sandbox: FunctionComponent<SandboxProps> = () => {
     getAllUsers()
       .then((res) => {
         if (res) {
-          console.log(res);
           setIsLoading(true);
           setUsers(res?.data);
         } else {
@@ -49,7 +49,6 @@ const Sandbox: FunctionComponent<SandboxProps> = () => {
       })
       .catch((err) => {
         reactToastifyError("Failed to fetch users");
-        console.log(err);
       });
   };
 
@@ -57,20 +56,26 @@ const Sandbox: FunctionComponent<SandboxProps> = () => {
     updateUserBusinessStatus(userId)
       .then((res) => {
         if (res) {
-          console.log(res);
           reactToastifySuccess("Business status updated");
         } else {
           reactToastifyError("Failed to update business status");
         }
       })
-      .catch((err) => {
-        reactToastifyError("Failed to update business status");
-        console.log(err);
+      .catch(() => {
+        reactToastifyError("Failed to fetch business status");
       });
   };
 
   useEffect(() => {
-    fetchData();
+    if (user?.isAdmin) {
+      fetchData();
+    } else {
+      reactToastifyError("Unauthorized");
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 3000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [usersListChanged, userBusinessStatus]);
 
   const usersToDisplay = users
@@ -151,7 +156,7 @@ const Sandbox: FunctionComponent<SandboxProps> = () => {
 
   return (
     <>
-      {user?.isAdmin && (
+      {user?.isAdmin ? (
         <>
           <div className="display-3">Sandbox</div>
           <Pagination className="d-flex justify-content-center my-3">
@@ -215,6 +220,8 @@ const Sandbox: FunctionComponent<SandboxProps> = () => {
             />
           </Pagination>
         </>
+      ) : (
+        <div className="display-3 text-danger mx-auto">Unauthorized</div>
       )}
     </>
   );

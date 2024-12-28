@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import PageNotFound from "./components/PageNotFound";
 import Login from "./routes/Login";
-import Register from "./routes/Register";
 import Home from "./routes/Home";
 import About from "./routes/About";
 import Navbar from "./components/Navbar";
@@ -21,6 +20,7 @@ import DisplayCard from "./routes/DisplayCard";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import Sandbox from "./routes/Sandbox";
 import Profile from "./routes/Profile";
+import Register from "./routes/Register";
 
 function App() {
   const [darkMode, setDarkMode] = useState<boolean>(
